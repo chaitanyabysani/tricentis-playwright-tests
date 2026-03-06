@@ -11,6 +11,8 @@ import { ApparelPage } from './ApparelPage';
 import { DigitalDownloadsPage } from './DigitalDownloadsPage';
 import { JewelryPage } from './JewelryPage';
 import { GiftCardsPage } from './GiftCardsPage';
+import { CameraPhotoPage } from './CameraPhotoPage';
+import { CellPhonesPage } from './CellPhonesPage';
 
 export class PageObjectManager {
   readonly page: Page;
@@ -27,6 +29,8 @@ export class PageObjectManager {
   private digitalDownloadsPage: DigitalDownloadsPage;
   private jewelryPage: JewelryPage;
   private giftCardsPage: GiftCardsPage;
+  private cameraPhotoPage: CameraPhotoPage;
+  private cellPhonesPage: CellPhonesPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,6 +47,8 @@ export class PageObjectManager {
     this.digitalDownloadsPage = new DigitalDownloadsPage(page);
     this.jewelryPage = new JewelryPage(page);
     this.giftCardsPage = new GiftCardsPage(page);
+    this.cameraPhotoPage = new CameraPhotoPage(page);
+    this.cellPhonesPage = new CellPhonesPage(page);
   }
 
   getHomePage(): HomePage {
@@ -91,5 +97,13 @@ export class PageObjectManager {
 
   getGiftCardsPage(): GiftCardsPage {
     return this.giftCardsPage;
+  }
+
+  getCameraPhotoPage(): CameraPhotoPage {
+    return this.cameraPhotoPage;
+  }
+
+  getCellPhonesPage(): CellPhonesPage {
+    return this.cellPhonesPage;
   }
 }
