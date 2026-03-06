@@ -41,26 +41,32 @@ Automated end-to-end test suite for [https://demowebshop.tricentis.com](https://
 ```
 tricentis-playwright-tests/
 │
-├── pageobjects/                   # Page Object classes
-│   ├── HomePage.ts                # Home page elements and actions
-│   ├── LoginPage.ts               # Login page elements and actions
-│   ├── RegisterPage.ts            # Register page elements and actions
-│   └── PageObjectManager.ts      # Central manager for all page objects
+├── pageobjects/                    # Page Object classes
+│   ├── HomePage.ts                 # Home page — header, nav, search, newsletter
+│   ├── LoginPage.ts                # Login page — form, validation errors
+│   ├── RegisterPage.ts             # Register page — form, validation errors
+│   ├── CartPage.ts                 # Shopping cart — items, totals, coupon, checkout
+│   ├── WishlistPage.ts             # Wishlist — items, add to cart, share URL
+│   ├── BooksPage.ts                # Books category — products, filters, sort, pagination
+│   ├── ComputersPage.ts            # Computers category — subcategory tiles
+│   ├── ElectronicsPage.ts          # Electronics category — subcategory tiles
+│   └── PageObjectManager.ts        # Central manager for all page objects
 │
-├── tests/                         # Test spec files
-│   ├── example.spec.ts            # Default Playwright sample test
-│   └── registration_login.spec.ts # E2E: Registration and Login scenario
+├── tests/                          # Test spec files
+│   ├── example.spec.ts             # Default Playwright sample test
+│   ├── registration.spec.ts        # Registration only — saves credentials
+│   └── registration_login.spec.ts  # E2E: Registration + Login scenario
 │
-├── utils/                         # Utilities and test data
-│   ├── testdata.json              # Static input data for tests
-│   ├── credentials.json           # Runtime-saved user credentials
-│   └── CredentialManager.ts      # Helper to save/load credentials
+├── utils/                          # Utilities and test data
+│   ├── testdata.json               # Static input data for tests
+│   ├── credentials.json            # Runtime-saved user credentials (array, appended)
+│   └── CredentialManager.ts        # Helper to save/load/loadAll credentials
 │
-├── playwright.config.ts           # Playwright configuration
-├── tsconfig.json                  # TypeScript compiler configuration
-├── package.json                   # Dependencies and npm scripts
-├── CLAUDE.md                      # Claude Code project instructions
-└── README.md                      # Project documentation
+├── playwright.config.ts            # Playwright configuration
+├── tsconfig.json                   # TypeScript compiler configuration
+├── package.json                    # Dependencies and npm scripts
+├── CLAUDE.md                       # Claude Code project instructions
+└── README.md                       # Project documentation
 ```
 
 ---
@@ -129,6 +135,8 @@ npx playwright install
 ## Page Objects
 
 All page object files are in the `pageobjects/` folder.
+
+---
 
 ### HomePage (`pageobjects/HomePage.ts`)
 
@@ -219,18 +227,198 @@ Covers the `/register` page.
 
 ---
 
+### CartPage (`pageobjects/CartPage.ts`)
+
+Covers the `/cart` page.
+
+| Element | Selector | Description |
+|---|---|---|
+| `cartTable` | `.cart` | Cart items table |
+| `cartItems` | `.cart tbody tr` | All cart item rows |
+| `emptyCartMessage` | `.no-data` | Empty cart message |
+| `itemProductNames` | `.cart .product-name a` | Product name links |
+| `itemUnitPrices` | `.cart .unit-price .product-unit-price` | Unit price per item |
+| `itemQuantityInputs` | `.cart .qty-input` | Quantity inputs |
+| `itemSubtotals` | `.cart .subtotal .product-subtotal` | Subtotal per item |
+| `itemRemoveCheckboxes` | `.cart .remove-from-cart input[type="checkbox"]` | Remove item checkboxes |
+| `updateCartButton` | `#updatecart` | Update cart button |
+| `continueShoppingButton` | `.continue-shopping-button` | Continue shopping link |
+| `checkoutButton` | `#checkout` | Proceed to checkout button |
+| `couponCodeInput` | `#couponcode` | Coupon code input |
+| `applyCouponButton` | `#applycouponbutton` | Apply coupon button |
+| `couponMessage` | `.coupon-code-result` | Coupon result message |
+| `giftCardInput` | `#giftcardcouponcode` | Gift card input |
+| `applyGiftCardButton` | `#applygiftcardcouponcode` | Apply gift card button |
+| `subTotal` | `.order-subtotal td:last-child` | Order subtotal |
+| `shipping` | `.shipping-cost td:last-child` | Shipping cost |
+| `tax` | `.tax-value td:last-child` | Tax amount |
+| `orderTotal` | `.order-total td:last-child` | Order total |
+| `termsOfServiceCheckbox` | `#termsofservice` | Terms of service checkbox |
+
+| Method | Description |
+|---|---|
+| `goto()` | Navigate to `/cart` |
+| `isCartEmpty()` | Returns `true` if cart is empty |
+| `getCartItemCount()` | Returns number of items in cart |
+| `getProductNames()` | Returns all product name strings |
+| `getOrderTotal()` | Returns order total text |
+| `updateItemQuantity(index, qty)` | Updates quantity for item at index |
+| `removeItem(index)` | Removes item at index from cart |
+| `applyCoupon(code)` | Applies a coupon code |
+| `applyGiftCard(code)` | Applies a gift card code |
+| `proceedToCheckout()` | Accepts terms and clicks checkout |
+
+---
+
+### WishlistPage (`pageobjects/WishlistPage.ts`)
+
+Covers the `/wishlist` page.
+
+| Element | Selector | Description |
+|---|---|---|
+| `wishlistTable` | `.wishlist` | Wishlist items table |
+| `wishlistItems` | `.wishlist tbody tr` | All wishlist item rows |
+| `emptyWishlistMessage` | `.no-data` | Empty wishlist message |
+| `itemProductNames` | `.wishlist .product-name a` | Product name links |
+| `itemUnitPrices` | `.wishlist .unit-price .product-unit-price` | Unit price per item |
+| `itemQuantityInputs` | `.wishlist .qty-input` | Quantity inputs |
+| `itemSubtotals` | `.wishlist .subtotal .product-subtotal` | Subtotal per item |
+| `itemAddToCartCheckboxes` | `.wishlist .add-to-cart input[type="checkbox"]` | Add to cart checkboxes |
+| `itemRemoveCheckboxes` | `.wishlist .remove-from-wishlist input[type="checkbox"]` | Remove item checkboxes |
+| `updateWishlistButton` | `#updatewishlist` | Update wishlist button |
+| `addToCartButton` | `.wishlist-add-to-cart-button` | Add selected items to cart |
+| `continueShoppingButton` | `.continue-shopping-button` | Continue shopping link |
+| `shareWishlistUrl` | `.wishlist-url-input` | Shareable wishlist URL input |
+
+| Method | Description |
+|---|---|
+| `goto()` | Navigate to `/wishlist` |
+| `isWishlistEmpty()` | Returns `true` if wishlist is empty |
+| `getWishlistItemCount()` | Returns number of items in wishlist |
+| `getProductNames()` | Returns all product name strings |
+| `updateItemQuantity(index, qty)` | Updates quantity for item at index |
+| `removeItem(index)` | Removes item at index from wishlist |
+| `addItemToCart(index)` | Checks one item and adds it to cart |
+| `addAllItemsToCart()` | Checks all items and adds them to cart |
+| `getShareableUrl()` | Returns the shareable wishlist URL |
+
+---
+
+### BooksPage (`pageobjects/BooksPage.ts`)
+
+Covers the `/books` category page.
+
+| Element | Selector | Description |
+|---|---|---|
+| `pageTitle` | `.page-title h1` | Page title |
+| `productItems` | `.product-item` | All product cards |
+| `productNames` | `.product-item .product-title a` | Product name links |
+| `productPrices` | `.product-item .actual-price` | Current prices |
+| `productOldPrices` | `.product-item .old-price` | Original (struck-through) prices |
+| `addToCartButtons` | `.product-item .product-box-add-to-cart-button` | Add to cart buttons |
+| `addToWishlistButtons` | `.product-item .add-to-wishlist-button` | Add to wishlist buttons |
+| `addToCompareButtons` | `.product-item .add-to-compare-list-button` | Add to compare buttons |
+| `gridViewButton` | `.viewmode-icon.grid` | Grid view toggle |
+| `listViewButton` | `.viewmode-icon.list` | List view toggle |
+| `sortByDropdown` | `#products-orderby` | Sort by dropdown |
+| `pageSizeDropdown` | `#products-pagesize` | Page size dropdown |
+| `priceFilterUnder25` | `getByRole('link', { name: 'Under $25.00' })` | Price filter: under $25 |
+| `priceFilter25To50` | `getByRole('link', { name: '$25.00 - $50.00' })` | Price filter: $25–$50 |
+| `priceFilterOver50` | `getByRole('link', { name: 'Over $50.00' })` | Price filter: over $50 |
+| `nextPageButton` | `.pager .next-page` | Next page button |
+| `prevPageButton` | `.pager .previous-page` | Previous page button |
+
+| Method | Description |
+|---|---|
+| `goto()` | Navigate to `/books` |
+| `getProductCount()` | Returns number of products on page |
+| `getProductNames()` | Returns all product name strings |
+| `getProductPrices()` | Returns all product price strings |
+| `clickProduct(name)` | Click a product by name |
+| `addProductToCartByIndex(index)` | Add product at index to cart |
+| `addProductToWishlistByIndex(index)` | Add product at index to wishlist |
+| `sortBy(option)` | Sort products (`position`, `name-asc`, `name-desc`, `price-asc`, `price-desc`, `created-on`) |
+| `setPageSize(size)` | Set page size (`4`, `8`, `12`) |
+| `filterByPriceUnder25()` | Filter by price under $25 |
+| `filterByPrice25To50()` | Filter by price $25–$50 |
+| `filterByPriceOver50()` | Filter by price over $50 |
+| `switchToGridView()` | Switch to grid view |
+| `switchToListView()` | Switch to list view |
+
+---
+
+### ComputersPage (`pageobjects/ComputersPage.ts`)
+
+Covers the `/computers` category page.
+
+| Element | Selector | Description |
+|---|---|---|
+| `pageTitle` | `.page-title h1` | Page title |
+| `subcategoryItems` | `.sub-category-item` | All subcategory tiles |
+| `desktopsLink` | `getByRole('link', { name: 'Desktops' })` | Desktops subcategory link |
+| `notebooksLink` | `getByRole('link', { name: 'Notebooks' })` | Notebooks subcategory link |
+| `accessoriesLink` | `getByRole('link', { name: 'Accessories' })` | Accessories subcategory link |
+
+| Method | Description |
+|---|---|
+| `goto()` | Navigate to `/computers` |
+| `getSubcategoryCount()` | Returns number of subcategory tiles |
+| `navigateToDesktops()` | Click Desktops subcategory |
+| `navigateToNotebooks()` | Click Notebooks subcategory |
+| `navigateToAccessories()` | Click Accessories subcategory |
+| `navigateToSubcategory(name)` | Click subcategory by name (`Desktops`, `Notebooks`, `Accessories`) |
+
+---
+
+### ElectronicsPage (`pageobjects/ElectronicsPage.ts`)
+
+Covers the `/electronics` category page.
+
+| Element | Selector | Description |
+|---|---|---|
+| `pageTitle` | `.page-title h1` | Page title |
+| `subcategoryItems` | `.sub-category-item` | All subcategory tiles |
+| `cameraPhotoLink` | `getByRole('link', { name: 'Camera, photo' })` | Camera/photo subcategory link |
+| `cellPhonesLink` | `getByRole('link', { name: 'Cell phones' })` | Cell phones subcategory link |
+
+| Method | Description |
+|---|---|
+| `goto()` | Navigate to `/electronics` |
+| `getSubcategoryCount()` | Returns number of subcategory tiles |
+| `navigateToCameraPhoto()` | Click Camera/photo subcategory |
+| `navigateToCellPhones()` | Click Cell phones subcategory |
+| `navigateToSubcategory(name)` | Click subcategory by name (`Camera, photo`, `Cell phones`) |
+
+---
+
 ### PageObjectManager (`pageobjects/PageObjectManager.ts`)
 
 Central class that instantiates all page objects. Use this in every test instead of creating page objects individually.
+
+| Getter | Returns |
+|---|---|
+| `getHomePage()` | `HomePage` |
+| `getLoginPage()` | `LoginPage` |
+| `getRegisterPage()` | `RegisterPage` |
+| `getCartPage()` | `CartPage` |
+| `getWishlistPage()` | `WishlistPage` |
+| `getBooksPage()` | `BooksPage` |
+| `getComputersPage()` | `ComputersPage` |
+| `getElectronicsPage()` | `ElectronicsPage` |
 
 ```typescript
 import { PageObjectManager } from '../pageobjects/PageObjectManager';
 
 const pom = new PageObjectManager(page);
 
-const homePage     = pom.getHomePage();
-const loginPage    = pom.getLoginPage();
-const registerPage = pom.getRegisterPage();
+const homePage        = pom.getHomePage();
+const loginPage       = pom.getLoginPage();
+const registerPage    = pom.getRegisterPage();
+const cartPage        = pom.getCartPage();
+const wishlistPage    = pom.getWishlistPage();
+const booksPage       = pom.getBooksPage();
+const computersPage   = pom.getComputersPage();
+const electronicsPage = pom.getElectronicsPage();
 ```
 
 ---
@@ -259,16 +447,22 @@ Holds static input data used across tests. Update this file to change test input
 
 ### `utils/credentials.json`
 
-Stores user credentials written at runtime after a successful registration. This file is **automatically populated by the test** — do not edit manually.
+Stores all registered user credentials as an **array**. New entries are **appended** on each registration run — old entries are never deleted. This file is automatically populated by the tests.
 
 ```json
-{
-  "email": "johndoe+1234567890@test.com",
-  "password": "Test@1234"
-}
+[
+  {
+    "email": "johndoe+1111111111@test.com",
+    "password": "Test@1234"
+  },
+  {
+    "email": "johndoe+2222222222@test.com",
+    "password": "Test@1234"
+  }
+]
 ```
 
-> These credentials can be reused in any other test scenario by using `CredentialManager.load()`.
+> Use `CredentialManager.load()` to get the most recent credentials, or `CredentialManager.loadAll()` to get all stored entries.
 
 ---
 
@@ -278,40 +472,69 @@ Helper class to save and load credentials from `credentials.json`.
 
 | Method | Description |
 |---|---|
-| `CredentialManager.save({ email, password })` | Writes credentials to `credentials.json` |
-| `CredentialManager.load()` | Reads and returns credentials. Throws a clear error if the file is empty (i.e., registration test has not run yet). |
+| `CredentialManager.save({ email, password })` | Appends new credentials to the array in `credentials.json`. Old entries are preserved. |
+| `CredentialManager.load()` | Returns the most recently saved credentials (last entry in array). Throws an error if the file is empty. |
+| `CredentialManager.loadAll()` | Returns all stored credentials as an array. |
 
 **Usage in any test:**
 
 ```typescript
 import { CredentialManager } from '../utils/CredentialManager';
 
-// Save after registration
+// Save after registration (appends, does not overwrite)
 CredentialManager.save({ email: 'user@test.com', password: 'Test@1234' });
 
-// Load in any test
+// Load most recent credentials
 const credentials = CredentialManager.load();
 await loginPage.login(credentials.email, credentials.password);
+
+// Load all stored credentials
+const allCredentials = CredentialManager.loadAll();
+console.log(`Total registered users: ${allCredentials.length}`);
 ```
 
 ---
 
 ## Test Scenarios
 
-### E2E: User Registration and Login (`tests/registration_login.spec.ts`)
+### Registration Only (`tests/registration.spec.ts`)
 
-Covers the complete new user journey from registration to login.
+Registers a new user and appends credentials to `credentials.json`.
+
+| Step | Action | Assertion |
+|---|---|---|
+| 1 | Navigate to `/register` | URL matches `/register` |
+| 2 | Fill form with data from `testdata.json` | — |
+| 3 | Submit registration form | Result message contains `Your registration completed` |
+| 4 | Append credentials to `credentials.json` | New entry added, old entries preserved |
+
+**Allure Annotations:**
+
+| Annotation | Value |
+|---|---|
+| Epic | User Account Management |
+| Feature | Registration |
+| Story | As a new user, I want to register an account |
+| Severity | Critical |
+| Tags | Registration, Regression |
+| Attachments | Test Input Data (JSON), Registration Result (text), All Saved Credentials (JSON) |
+
+---
+
+### E2E: Registration and Login (`tests/registration_login.spec.ts`)
+
+Covers the complete new user journey from registration through to login.
 
 | Step | Action | Assertion |
 |---|---|---|
 | 1 | Navigate to `/register` | URL matches `/register` |
 | 2 | Fill form with data from `testdata.json` (gender, name, unique email, password) | — |
 | 3 | Submit registration form | Result message contains `Your registration completed` |
-| 4 | Save credentials to `credentials.json` via `CredentialManager` | Credentials file is updated |
+| 4 | Append credentials to `credentials.json` via `CredentialManager` | New entry added, old entries preserved |
 | 5 | Navigate to `/login` | URL matches `/login` |
-| 6 | Load credentials from `credentials.json` and login | `.account` link and logout icon are visible |
+| 6 | Load latest credentials from `credentials.json` and login | `.account` link and logout icon are visible |
 
-**Allure Annotations on this test:**
+**Allure Annotations:**
 
 | Annotation | Value |
 |---|---|
@@ -359,6 +582,7 @@ npm test
 
 ### Run a specific test file
 ```bash
+npx playwright test tests/registration.spec.ts
 npx playwright test tests/registration_login.spec.ts
 ```
 
@@ -458,6 +682,7 @@ Each step shows its parameters in a table:
 | Email | johndoe+1234567890@test.com |
 | Login Email | johndoe+1234567890@test.com |
 | Password | ***hidden*** |
+| Total Credentials Stored | 3 |
 
 ### Attachments
 The following files are attached to the test run and viewable in the report:
@@ -466,7 +691,8 @@ The following files are attached to the test run and viewable in the report:
 |---|---|---|
 | Test Input Data | JSON | gender, firstName, lastName, generatedEmail |
 | Registration Result Message | Text | Actual success message from the UI |
-| Saved Credentials | JSON | email (password hidden) saved to credentials.json |
+| Saved Credentials | JSON | email (password hidden) |
+| All Saved Credentials | JSON | Full list of all stored credentials (passwords hidden) |
 
 ---
 
