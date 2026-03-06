@@ -79,7 +79,9 @@ tricentis-playwright-tests/
 │   ├── category_digital_downloads.spec.ts       # Module 5E — Digital Downloads (3 scenarios)
 │   ├── category_jewelry.spec.ts                 # Module 5F — Jewelry (4 scenarios)
 │   ├── category_gift_cards.spec.ts              # Module 5G — Gift Cards (4 scenarios)
-│   └── product_detail_page.spec.ts              # Module 6 — Product Detail Page (12 scenarios)
+│   ├── product_detail_page.spec.ts              # Module 6 — Product Detail Page (12 scenarios)
+│   ├── shopping_cart.spec.ts                    # Module 7 — Shopping Cart (13 scenarios)
+│   └── checkout_flow.spec.ts                    # Module 8 — Checkout Flow (13 scenarios)
 │
 ├── utils/                              # Utilities and test data
 │   ├── testdata.json                   # Static input data for tests
@@ -987,14 +989,14 @@ Full scenario list covering all functional areas of the application. **149 total
 | 5F. Jewelry | 4 | 4 | 0 | `category_jewelry.spec.ts` |
 | 5G. Gift Cards | 4 | 4 | 0 | `category_gift_cards.spec.ts` |
 | 6. Product Detail Page | 12 | 12 | 0 | `product_detail_page.spec.ts` |
-| 7. Shopping Cart | 13 | 5 | 8 | Planned |
-| 8. Checkout Flow | 13 | 7 | 6 | Planned |
+| 7. Shopping Cart | 13 | 13 | 0 | `shopping_cart.spec.ts` |
+| 8. Checkout Flow | 13 | 13 | 0 | `checkout_flow.spec.ts` |
 | 9. My Account | 12 | 0 | 12 | Planned |
 | 10. Wishlist | 7 | 0 | 7 | Planned |
 | 11. Product Comparison | 4 | 0 | 4 | Planned |
 | 12. Content / Static Pages | 10 | 0 | 10 | Planned |
 | 13. End-to-End Flows | 10 | 1 | 9 | `e2e_purchase_flow.spec.ts` + Planned |
-| **Total** | **149** | **100** | **49** | — |
+| **Total** | **149** | **126** | **23** | — |
 
 ---
 
@@ -1172,41 +1174,43 @@ Each sub-module has its own dedicated spec file under `tests/`.
 ---
 
 ### Module 7 — Shopping Cart
+**Spec file:** `tests/shopping_cart.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
 | 7.1 | Cart displays correct product name, unit price, quantity, and subtotal | High | Implemented |
-| 7.2 | Update product quantity in cart → subtotal recalculates correctly | High | Planned |
-| 7.3 | Remove item from cart → cart becomes empty | High | Planned |
+| 7.2 | Update product quantity in cart → subtotal recalculates correctly | High | Implemented |
+| 7.3 | Remove item from cart → cart becomes empty | High | Implemented |
 | 7.4 | Cart item count badge in header updates correctly after add/remove | High | Implemented |
 | 7.5 | Estimate shipping: select country/state, enter zip → rates displayed | High | Implemented |
-| 7.6 | Apply valid coupon code → discount applied to order total | Medium | Planned |
-| 7.7 | Apply invalid coupon code → error message displayed | Medium | Planned |
-| 7.8 | Apply gift card code → balance deducted from order total | Medium | Planned |
+| 7.6 | Apply valid coupon code → discount applied to order total | Medium | Implemented |
+| 7.7 | Apply invalid coupon code → error message displayed | Medium | Implemented |
+| 7.8 | Apply gift card code → balance deducted from order total | Medium | Implemented |
 | 7.9 | Terms of Service checkbox must be accepted before checkout | High | Implemented |
-| 7.10 | Proceeding to checkout without accepting ToS → blocked with error | High | Planned |
-| 7.11 | Header flyout cart shows added items and subtotal on hover | Medium | Planned |
-| 7.12 | "Continue shopping" from cart → returns to previous page | Low | Planned |
-| 7.13 | Cart contents persist after browser refresh for a logged-in user | Medium | Planned |
+| 7.10 | Proceeding to checkout without accepting ToS → blocked with error | High | Implemented |
+| 7.11 | Header flyout cart shows added items and subtotal on hover | Medium | Implemented |
+| 7.12 | "Continue shopping" from cart → returns to previous page | Low | Implemented |
+| 7.13 | Cart contents persist after browser refresh for a logged-in user | Medium | Implemented |
 
 ---
 
 ### Module 8 — Checkout Flow
+**Spec file:** `tests/checkout_flow.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 8.1 | Complete checkout as a guest (no account required) | High | Planned |
+| 8.1 | Complete checkout as a guest (no account required) | High | Implemented |
 | 8.2 | Complete checkout as a registered / logged-in user | High | Implemented |
 | 8.3 | Billing address: fill all required fields and continue | High | Implemented |
-| 8.4 | Billing address: leave required fields blank → validation errors shown | High | Planned |
-| 8.5 | Use an existing saved address for billing | Medium | Planned |
-| 8.6 | Toggle "Ship to different address" and fill separate shipping address | Medium | Planned |
+| 8.4 | Billing address: leave required fields blank → validation errors shown | High | Implemented |
+| 8.5 | Use an existing saved address for billing | Medium | Implemented |
+| 8.6 | Toggle "Ship to different address" and fill separate shipping address | Medium | Implemented |
 | 8.7 | Select Ground shipping method and continue | High | Implemented |
-| 8.8 | Select Next Day Air shipping method and verify updated cost | Medium | Planned |
+| 8.8 | Select Next Day Air shipping method and verify updated cost | Medium | Implemented |
 | 8.9 | Select "Check / Money Order" payment method and confirm | High | Implemented |
-| 8.10 | Select Credit Card payment method (if available) and confirm | Medium | Planned |
+| 8.10 | Select Credit Card payment method (if available) and confirm | Medium | Implemented |
 | 8.11 | Order confirmation page displays a valid order number | High | Implemented |
-| 8.12 | Order confirmation page displays correct items and order total | High | Planned |
+| 8.12 | Order confirmation page displays correct items and order total | High | Implemented |
 | 8.13 | "Thank you" / order completed page is displayed after order submission | High | Implemented |
 
 ---
@@ -1338,6 +1342,12 @@ npx playwright test tests/product_search.spec.ts
 
 # Module 6 — Product Detail Page
 npx playwright test tests/product_detail_page.spec.ts
+
+# Module 7 — Shopping Cart
+npx playwright test tests/shopping_cart.spec.ts
+
+# Module 8 — Checkout Flow
+npx playwright test tests/checkout_flow.spec.ts
 
 # Module 5 — Category Pages (run all or individually)
 npx playwright test tests/category_books.spec.ts
