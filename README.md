@@ -81,7 +81,9 @@ tricentis-playwright-tests/
 │   ├── category_gift_cards.spec.ts              # Module 5G — Gift Cards (4 scenarios)
 │   ├── product_detail_page.spec.ts              # Module 6 — Product Detail Page (12 scenarios)
 │   ├── shopping_cart.spec.ts                    # Module 7 — Shopping Cart (13 scenarios)
-│   └── checkout_flow.spec.ts                    # Module 8 — Checkout Flow (13 scenarios)
+│   ├── checkout_flow.spec.ts                    # Module 8 — Checkout Flow (13 scenarios)
+│   ├── my_account.spec.ts                       # Module 9 — My Account (12 scenarios)
+│   └── wishlist.spec.ts                         # Module 10 — Wishlist (7 scenarios)
 │
 ├── utils/                              # Utilities and test data
 │   ├── testdata.json                   # Static input data for tests
@@ -991,12 +993,12 @@ Full scenario list covering all functional areas of the application. **149 total
 | 6. Product Detail Page | 12 | 12 | 0 | `product_detail_page.spec.ts` |
 | 7. Shopping Cart | 13 | 13 | 0 | `shopping_cart.spec.ts` |
 | 8. Checkout Flow | 13 | 13 | 0 | `checkout_flow.spec.ts` |
-| 9. My Account | 12 | 0 | 12 | Planned |
-| 10. Wishlist | 7 | 0 | 7 | Planned |
+| 9. My Account | 12 | 12 | 0 | `my_account.spec.ts` |
+| 10. Wishlist | 7 | 7 | 0 | `wishlist.spec.ts` |
 | 11. Product Comparison | 4 | 0 | 4 | Planned |
 | 12. Content / Static Pages | 10 | 0 | 10 | Planned |
 | 13. End-to-End Flows | 10 | 1 | 9 | `e2e_purchase_flow.spec.ts` + Planned |
-| **Total** | **149** | **126** | **23** | — |
+| **Total** | **149** | **145** | **4** | — |
 
 ---
 
@@ -1216,35 +1218,37 @@ Each sub-module has its own dedicated spec file under `tests/`.
 ---
 
 ### Module 9 — My Account (Authenticated)
+**Spec file:** `tests/my_account.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 9.1 | View and edit customer info (name, email, gender, date of birth) | High | Planned |
-| 9.2 | Change password with valid old and new password | High | Planned |
-| 9.3 | Change password with wrong old password → error message | High | Planned |
-| 9.4 | View order history list in My Account | High | Planned |
-| 9.5 | View individual order details (products, total, status) | High | Planned |
-| 9.6 | Add a new shipping address | Medium | Planned |
-| 9.7 | Edit an existing shipping address | Medium | Planned |
-| 9.8 | Delete a shipping address | Medium | Planned |
-| 9.9 | View downloadable products section (for digital download purchases) | Medium | Planned |
-| 9.10 | View back-in-stock subscriptions | Low | Planned |
-| 9.11 | View reward points balance | Low | Planned |
-| 9.12 | Manage newsletter subscription preference (subscribe / unsubscribe) | Low | Planned |
+| 9.1 | View and edit customer info (name, email, gender, date of birth) | High | Implemented |
+| 9.2 | Change password with valid old and new password | High | Implemented |
+| 9.3 | Change password with wrong old password → error message | High | Implemented |
+| 9.4 | View order history list in My Account | High | Implemented |
+| 9.5 | View individual order details (products, total, status) | High | Implemented |
+| 9.6 | Add a new shipping address | Medium | Implemented |
+| 9.7 | Edit an existing shipping address | Medium | Implemented |
+| 9.8 | Delete a shipping address | Medium | Implemented |
+| 9.9 | View downloadable products section (for digital download purchases) | Medium | Implemented |
+| 9.10 | View back-in-stock subscriptions | Low | Implemented |
+| 9.11 | View reward points balance | Low | Implemented |
+| 9.12 | Manage newsletter subscription preference (subscribe / unsubscribe) | Low | Implemented |
 
 ---
 
 ### Module 10 — Wishlist
+**Spec file:** `tests/wishlist.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 10.1 | Add a product to wishlist when logged in | High | Planned |
-| 10.2 | View wishlist → product appears with correct name and price | High | Planned |
-| 10.3 | Move a wishlist item to shopping cart | High | Planned |
-| 10.4 | Remove an item from the wishlist | High | Planned |
-| 10.5 | Attempt to add to wishlist when not logged in → redirect to login | High | Planned |
-| 10.6 | Share wishlist via public shareable link | Low | Planned |
-| 10.7 | Update quantity of a wishlist item | Low | Planned |
+| 10.1 | Add a product to wishlist when logged in | High | Implemented |
+| 10.2 | View wishlist → product appears with correct name and price | High | Implemented |
+| 10.3 | Move a wishlist item to shopping cart | High | Implemented |
+| 10.4 | Remove an item from the wishlist | High | Implemented |
+| 10.5 | Attempt to add to wishlist when not logged in → redirect to login | High | Implemented |
+| 10.6 | Share wishlist via public shareable link | Low | Implemented |
+| 10.7 | Update quantity of a wishlist item | Low | Implemented |
 
 ---
 
@@ -1348,6 +1352,12 @@ npx playwright test tests/shopping_cart.spec.ts
 
 # Module 8 — Checkout Flow
 npx playwright test tests/checkout_flow.spec.ts
+
+# Module 9 — My Account
+npx playwright test tests/my_account.spec.ts
+
+# Module 10 — Wishlist
+npx playwright test tests/wishlist.spec.ts
 
 # Module 5 — Category Pages (run all or individually)
 npx playwright test tests/category_books.spec.ts
