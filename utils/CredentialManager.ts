@@ -10,19 +10,37 @@ export interface UserCredentials {
 
 export class CredentialManager {
 
+  // Appends new credentials to the file — old entries are preserved
   static save(credentials: UserCredentials): void {
-    fs.writeFileSync(credentialsFilePath, JSON.stringify(credentials, null, 2), 'utf-8');
-    console.log(`Credentials saved for: ${credentials.email}`);
+    const existing = CredentialManager.loadAll();
+    existing.push(credentials);
+    fs.writeFileSync(credentialsFilePath, JSON.stringify(existing, null, 2), 'utf-8');
+    console.log(`Credentials saved for: ${credentials.email} (total stored: ${existing.length})`);
   }
 
+  // Returns the most recently saved credentials (last entry)
   static load(): UserCredentials {
-    const raw = fs.readFileSync(credentialsFilePath, 'utf-8');
-    const credentials: UserCredentials = JSON.parse(raw);
+    const all = CredentialManager.loadAll();
 
-    if (!credentials.email || !credentials.password) {
-      throw new Error('Credentials file is empty. Run the registration test first.');
+    if (all.length === 0) {
+      throw new Error('No credentials found. Run the registration test first.');
     }
 
-    return credentials;
+    return all[all.length - 1];
+  }
+
+  // Returns all stored credentials
+  static loadAll(): UserCredentials[] {
+    if (!fs.existsSync(credentialsFilePath)) {
+      return [];
+    }
+
+    const raw = fs.readFileSync(credentialsFilePath, 'utf-8').trim();
+
+    if (!raw || raw === '[]') {
+      return [];
+    }
+
+    return JSON.parse(raw) as UserCredentials[];
   }
 }
