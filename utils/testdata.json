@@ -5,5 +5,24 @@
     "lastName": "Doe",
     "emailPrefix": "johndoe",
     "password": "Test@1234"
+  },
+  "search": {
+    "term": "Computing and Internet",
+    "expectedBook": "Computing and Internet"
+  },
+  "shipping": {
+    "country": "United States",
+    "state": "New York",
+    "zip": "10001"
+  },
+  "checkout": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "country": "United States",
+    "state": "New York",
+    "city": "New York",
+    "address": "123 Main Street",
+    "zip": "10001",
+    "phone": "1234567890"
   }
 }

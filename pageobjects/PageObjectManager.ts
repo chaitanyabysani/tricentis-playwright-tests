@@ -13,6 +13,10 @@ import { JewelryPage } from './JewelryPage';
 import { GiftCardsPage } from './GiftCardsPage';
 import { CameraPhotoPage } from './CameraPhotoPage';
 import { CellPhonesPage } from './CellPhonesPage';
+import { SearchResultsPage } from './SearchResultsPage';
+import { ProductPage } from './ProductPage';
+import { CheckoutPage } from './CheckoutPage';
+import { OrderConfirmationPage } from './OrderConfirmationPage';
 
 export class PageObjectManager {
   readonly page: Page;
@@ -31,6 +35,10 @@ export class PageObjectManager {
   private giftCardsPage: GiftCardsPage;
   private cameraPhotoPage: CameraPhotoPage;
   private cellPhonesPage: CellPhonesPage;
+  private searchResultsPage: SearchResultsPage;
+  private productPage: ProductPage;
+  private checkoutPage: CheckoutPage;
+  private orderConfirmationPage: OrderConfirmationPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -49,6 +57,10 @@ export class PageObjectManager {
     this.giftCardsPage = new GiftCardsPage(page);
     this.cameraPhotoPage = new CameraPhotoPage(page);
     this.cellPhonesPage = new CellPhonesPage(page);
+    this.searchResultsPage = new SearchResultsPage(page);
+    this.productPage = new ProductPage(page);
+    this.checkoutPage = new CheckoutPage(page);
+    this.orderConfirmationPage = new OrderConfirmationPage(page);
   }
 
   getHomePage(): HomePage {
@@ -105,5 +117,21 @@ export class PageObjectManager {
 
   getCellPhonesPage(): CellPhonesPage {
     return this.cellPhonesPage;
+  }
+
+  getSearchResultsPage(): SearchResultsPage {
+    return this.searchResultsPage;
+  }
+
+  getProductPage(): ProductPage {
+    return this.productPage;
+  }
+
+  getCheckoutPage(): CheckoutPage {
+    return this.checkoutPage;
+  }
+
+  getOrderConfirmationPage(): OrderConfirmationPage {
+    return this.orderConfirmationPage;
   }
 }

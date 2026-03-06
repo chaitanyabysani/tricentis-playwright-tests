@@ -43,7 +43,7 @@ export class HomePage {
 
     // Search
     this.searchInput = page.locator('#small-searchterms');
-    this.searchButton = page.locator('.search-box button[type="submit"]');
+    this.searchButton = page.locator('.search-box-button');
 
     // Navigation menu
     this.booksMenu = page.getByRole('link', { name: 'Books' });
@@ -65,7 +65,7 @@ export class HomePage {
 
   async search(term: string) {
     await this.searchInput.fill(term);
-    await this.searchButton.click();
+    await this.searchInput.press('Enter');
   }
 
   async navigateToCategory(category: string) {

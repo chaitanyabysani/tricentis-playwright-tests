@@ -38,6 +38,14 @@ export class CartPage {
   // Terms of service
   readonly termsOfServiceCheckbox: Locator;
 
+  // Estimate shipping
+  readonly estimateShippingCountry: Locator;
+  readonly estimateShippingState: Locator;
+  readonly estimateShippingZip: Locator;
+  readonly estimateShippingButton: Locator;
+  readonly shippingResultsSection: Locator;
+  readonly shippingOptionItems: Locator;
+
   constructor(page: Page) {
     this.page = page;
 
@@ -47,7 +55,7 @@ export class CartPage {
     this.emptyCartMessage = page.locator('.no-data');
 
     // Per cart item elements
-    this.itemProductNames = page.locator('.cart .product-name a');
+    this.itemProductNames = page.locator('.cart td.product a');
     this.itemUnitPrices = page.locator('.cart .unit-price .product-unit-price');
     this.itemQuantityInputs = page.locator('.cart .qty-input');
     this.itemSubtotals = page.locator('.cart .subtotal .product-subtotal');
@@ -75,6 +83,14 @@ export class CartPage {
 
     // Terms of service
     this.termsOfServiceCheckbox = page.locator('#termsofservice');
+
+    // Estimate shipping
+    this.estimateShippingCountry = page.locator('#CountryId');
+    this.estimateShippingState = page.locator('#StateProvinceId');
+    this.estimateShippingZip = page.locator('#ZipPostalCode');
+    this.estimateShippingButton = page.locator('.estimate-shipping-button');
+    this.shippingResultsSection = page.locator('.shipping-results');
+    this.shippingOptionItems = page.locator('.shipping-results li, .shipping-option-list li');
   }
 
   async goto() {
@@ -90,6 +106,7 @@ export class CartPage {
   }
 
   async getProductNames(): Promise<string[]> {
+    await this.cartTable.waitFor({ state: 'visible' });
     return await this.itemProductNames.allTextContents();
   }
 
@@ -120,5 +137,28 @@ export class CartPage {
   async proceedToCheckout() {
     await this.termsOfServiceCheckbox.check();
     await this.checkoutButton.click();
+  }
+
+  async estimateShipping(country: string, state: string, zip: string) {
+    await this.estimateShippingCountry.selectOption({ label: country });
+    await this.page.waitForTimeout(500);
+    await this.estimateShippingState.selectOption({ label: state });
+    await this.estimateShippingZip.fill(zip);
+    await this.estimateShippingButton.click();
+    await this.shippingResultsSection.waitFor({ state: 'visible' });
+  }
+
+  async getShippingOptions(): Promise<string[]> {
+    const count = await this.shippingOptionItems.count();
+    if (count > 0) {
+      return await this.shippingOptionItems.allTextContents();
+    }
+    // Fallback: return full text of the results section
+    const text = await this.shippingResultsSection.innerText();
+    return text.trim() ? [text.trim()] : [];
+  }
+
+  async getHeaderCartCount(): Promise<string> {
+    return await this.page.locator('.cart-qty').innerText();
   }
 }
