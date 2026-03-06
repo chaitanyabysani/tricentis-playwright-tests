@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { allure } from 'allure-playwright';
+import {
+  epic, feature, story, severity, owner, tag, link,
+  descriptionHtml, parameter, attachment, step
+} from 'allure-js-commons';
 import { Severity } from 'allure-js-commons';
 import { PageObjectManager } from '../pageobjects/PageObjectManager';
 import { CredentialManager } from '../utils/CredentialManager';
@@ -8,17 +11,17 @@ import testData from '../utils/testdata.json';
 test('E2E: Register a new user and login with saved credentials', async ({ page }) => {
 
   // ─── Allure Report Metadata ───────────────────────────────────────────────
-  allure.epic('User Account Management');
-  allure.feature('Registration & Login');
-  allure.story('As a new user, I want to register and login to my account');
-  allure.severity(Severity.CRITICAL);
-  allure.owner('QA Team');
-  allure.tag('E2E');
-  allure.tag('Regression');
-  allure.tag('Authentication');
-  allure.link('https://demowebshop.tricentis.com', 'Application Under Test');
+  await epic('User Account Management');
+  await feature('Registration & Login');
+  await story('As a new user, I want to register and login to my account');
+  await severity(Severity.CRITICAL);
+  await owner('QA Team');
+  await tag('E2E');
+  await tag('Regression');
+  await tag('Authentication');
+  await link('https://demowebshop.tricentis.com', 'Application Under Test');
 
-  allure.descriptionHtml(`
+  await descriptionHtml(`
     <h2>Test Objective</h2>
     <p>
       Verify that a <strong>new user</strong> can successfully complete the full registration flow
@@ -67,7 +70,7 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
   const password = testData.newUser.password;
 
   // Attach full test input data to report
-  await allure.attachment(
+  await attachment(
     'Test Input Data (testdata.json)',
     JSON.stringify({
       gender: testData.newUser.gender,
@@ -82,23 +85,23 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
   // ─── Step 1: Register New User ────────────────────────────────────────────
   await test.step('Step 1: Register a new user on the Registration page', async () => {
 
-    await allure.step('Navigate to the Registration page (/register)', async () => {
+    await step('Navigate to the Registration page (/register)', async () => {
       await registerPage.goto();
       await expect(page).toHaveURL(/.*register/);
     });
 
-    await allure.step(
+    await step(
       `Fill in personal details — ${testData.newUser.firstName} ${testData.newUser.lastName} (${testData.newUser.gender})`,
       async () => {
-        allure.parameter('Gender', testData.newUser.gender);
-        allure.parameter('First Name', testData.newUser.firstName);
-        allure.parameter('Last Name', testData.newUser.lastName);
-        allure.parameter('Email', uniqueEmail);
-        allure.parameter('Password', '***hidden***');
+        await parameter('Gender', testData.newUser.gender);
+        await parameter('First Name', testData.newUser.firstName);
+        await parameter('Last Name', testData.newUser.lastName);
+        await parameter('Email', uniqueEmail);
+        await parameter('Password', '***hidden***');
       }
     );
 
-    await allure.step('Submit the registration form', async () => {
+    await step('Submit the registration form', async () => {
       await registerPage.register(
         testData.newUser.gender as 'male' | 'female',
         testData.newUser.firstName,
@@ -108,15 +111,15 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
       );
     });
 
-    await allure.step('Verify registration success message is displayed', async () => {
+    await step('Verify registration success message is displayed', async () => {
       const result = await registerPage.getRegistrationResult();
       expect(result).toContain('Your registration completed');
-      await allure.attachment('Registration Result Message', result, 'text/plain');
+      await attachment('Registration Result Message', result, 'text/plain');
     });
 
-    await allure.step('Save registered credentials to credentials.json for reuse', async () => {
+    await step('Save registered credentials to credentials.json for reuse', async () => {
       CredentialManager.save({ email: uniqueEmail, password });
-      await allure.attachment(
+      await attachment(
         'Saved Credentials (credentials.json)',
         JSON.stringify({ email: uniqueEmail, password: '***hidden***' }, null, 2),
         'application/json'
@@ -128,11 +131,11 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
   // ─── Step 2: Navigate to Login Page ──────────────────────────────────────
   await test.step('Step 2: Navigate to the Login page', async () => {
 
-    await allure.step('Go to the Login page (/login)', async () => {
+    await step('Go to the Login page (/login)', async () => {
       await loginPage.goto();
     });
 
-    await allure.step('Verify the current URL is the Login page', async () => {
+    await step('Verify the current URL is the Login page', async () => {
       await expect(page).toHaveURL(/.*login/);
     });
 
@@ -141,22 +144,22 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
   // ─── Step 3: Login with Saved Credentials ────────────────────────────────
   await test.step('Step 3: Login using saved credentials from credentials.json', async () => {
 
-    await allure.step('Load saved credentials from credentials.json', async () => {
+    await step('Load saved credentials from credentials.json', async () => {
       const credentials = CredentialManager.load();
-      allure.parameter('Login Email', credentials.email);
-      allure.parameter('Login Password', '***hidden***');
+      await parameter('Login Email', credentials.email);
+      await parameter('Login Password', '***hidden***');
     });
 
-    await allure.step('Enter email and password and submit the login form', async () => {
+    await step('Enter email and password and submit the login form', async () => {
       const credentials = CredentialManager.load();
       await loginPage.login(credentials.email, credentials.password);
     });
 
-    await allure.step('Verify user is logged in — account link is visible in header', async () => {
+    await step('Verify user is logged in — account link is visible in header', async () => {
       await expect(page.locator('.account')).toBeVisible();
     });
 
-    await allure.step('Verify user is logged in — logout button is visible in header', async () => {
+    await step('Verify user is logged in — logout button is visible in header', async () => {
       await expect(page.locator('.ico-logout')).toBeVisible();
     });
 
