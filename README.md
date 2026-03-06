@@ -18,6 +18,7 @@ Automated end-to-end test suite for [https://demowebshop.tricentis.com](https://
 - [Running Tests](#running-tests)
 - [Reports](#reports)
 - [Allure Report Details](#allure-report-details)
+- [.gitignore](#gitignore)
 - [How to Add a New Test](#how-to-add-a-new-test)
 
 ---
@@ -137,6 +138,8 @@ Covers the main landing page of the shop.
 |---|---|---|
 | `registerLink` | `getByRole('link', { name: 'Register' })` | Header Register link |
 | `loginLink` | `getByRole('link', { name: 'Log in' })` | Header Log in link |
+| `accountLink` | `.account` (first match) | Account link visible after login |
+| `logoutLink` | `.ico-logout` | Logout button visible after login |
 | `cartLink` | `.cart-qty` | Shopping cart indicator |
 | `wishlistLink` | `.wishlist-qty` | Wishlist indicator |
 | `searchInput` | `#small-searchterms` | Search bar input |
@@ -467,6 +470,23 @@ The following files are attached to the test run and viewable in the report:
 
 ---
 
+## .gitignore
+
+The following folders are excluded from version control:
+
+| Folder | Reason |
+|---|---|
+| `node_modules/` | Third-party dependencies — restored via `npm install` |
+| `test-results/` | Playwright test artifacts (screenshots, videos, traces) |
+| `playwright-report/` | Playwright HTML report output |
+| `blob-report/` | Playwright blob reporter output |
+| `allure-results/` | Raw Allure test result files generated per run |
+| `allure-report/` | Generated Allure HTML report |
+
+> Never commit `allure-results/` or `allure-report/` — these are generated locally on each run using `npm run allure:generate`.
+
+---
+
 ## How to Add a New Test
 
 1. **Create a page object** (if needed) in `pageobjects/` following the pattern of existing pages.
@@ -478,23 +498,23 @@ The following files are attached to the test run and viewable in the report:
 
 ```typescript
 import { test, expect } from '@playwright/test';
-import { allure } from 'allure-playwright';
+import { epic, feature, story, severity, owner, tag, description, step } from 'allure-js-commons';
 import { Severity } from 'allure-js-commons';
 import { PageObjectManager } from '../pageobjects/PageObjectManager';
 
 test('My new test scenario', async ({ page }) => {
-  allure.epic('My Epic');
-  allure.feature('My Feature');
-  allure.story('My Story');
-  allure.severity(Severity.NORMAL);
-  allure.tag('Regression');
-  allure.owner('QA Team');
-  allure.description('Describe what this test verifies.');
+  await epic('My Epic');
+  await feature('My Feature');
+  await story('My Story');
+  await severity(Severity.NORMAL);
+  await tag('Regression');
+  await owner('QA Team');
+  await description('Describe what this test verifies.');
 
   const pom = new PageObjectManager(page);
 
   await test.step('Step 1: Description', async () => {
-    await allure.step('Sub-step detail', async () => {
+    await step('Sub-step detail', async () => {
       // actions and assertions
     });
   });
