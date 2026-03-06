@@ -3,6 +3,7 @@ import { HomePage } from './HomePage';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 import { CartPage } from './CartPage';
+import { WishlistPage } from './WishlistPage';
 
 export class PageObjectManager {
   readonly page: Page;
@@ -11,6 +12,7 @@ export class PageObjectManager {
   private loginPage: LoginPage;
   private registerPage: RegisterPage;
   private cartPage: CartPage;
+  private wishlistPage: WishlistPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,6 +21,7 @@ export class PageObjectManager {
     this.loginPage = new LoginPage(page);
     this.registerPage = new RegisterPage(page);
     this.cartPage = new CartPage(page);
+    this.wishlistPage = new WishlistPage(page);
   }
 
   getHomePage(): HomePage {
@@ -35,5 +38,9 @@ export class PageObjectManager {
 
   getCartPage(): CartPage {
     return this.cartPage;
+  }
+
+  getWishlistPage(): WishlistPage {
+    return this.wishlistPage;
   }
 }
