@@ -64,10 +64,21 @@ tricentis-playwright-tests/
 │   └── PageObjectManager.ts            # Central manager for all page objects
 │
 ├── tests/                              # Test spec files
-│   ├── example.spec.ts                 # Default Playwright sample test
-│   ├── registration.spec.ts            # Registration only — saves credentials
-│   ├── registration_login.spec.ts      # E2E: Registration + Login scenario
-│   └── e2e_purchase_flow.spec.ts       # E2E: Full purchase flow (16 steps)
+│   ├── example.spec.ts                          # Default Playwright sample test
+│   ├── registration.spec.ts                     # Registration only — saves credentials
+│   ├── registration_login.spec.ts               # E2E: Registration + Login scenario
+│   ├── e2e_purchase_flow.spec.ts                # E2E: Full purchase flow (16 steps)
+│   ├── user_registration.spec.ts                # Module 1 — User Registration (8 scenarios)
+│   ├── user_authentication.spec.ts              # Module 2 — Login / Logout (8 scenarios)
+│   ├── home_page.spec.ts                        # Module 3 — Home Page (9 scenarios)
+│   ├── product_search.spec.ts                   # Module 4 — Product Search (12 scenarios)
+│   ├── category_books.spec.ts                   # Module 5A — Books (8 scenarios)
+│   ├── category_computers.spec.ts               # Module 5B — Computers (7 scenarios)
+│   ├── category_electronics.spec.ts             # Module 5C — Electronics (5 scenarios)
+│   ├── category_apparel.spec.ts                 # Module 5D — Apparel & Shoes (5 scenarios)
+│   ├── category_digital_downloads.spec.ts       # Module 5E — Digital Downloads (3 scenarios)
+│   ├── category_jewelry.spec.ts                 # Module 5F — Jewelry (4 scenarios)
+│   └── category_gift_cards.spec.ts              # Module 5G — Gift Cards (4 scenarios)
 │
 ├── utils/                              # Utilities and test data
 │   ├── testdata.json                   # Static input data for tests
@@ -955,168 +966,187 @@ Step 16: Verify order confirmation page
 
 Full scenario list covering all functional areas of the application. **149 total scenarios** across 13 modules.
 
-> Scenarios marked as **[Implemented]** are already automated. All others are planned for future implementation.
+> **Status Legend:** `Implemented` — automated test exists. `Planned` — identified but not yet automated.
 
 ---
 
 ### Scenario Summary
 
-| Module | Total | High | Medium | Low |
-|--------|-------|------|--------|-----|
-| 1. Registration | 8 | 6 | 2 | 0 |
-| 2. Authentication (Login/Logout) | 8 | 6 | 2 | 0 |
-| 3. Home Page | 9 | 0 | 4 | 5 |
-| 4. Product Search | 12 | 3 | 6 | 3 |
-| 5. Category Pages | 31 | 13 | 16 | 2 |
-| 6. Product Detail Page | 12 | 6 | 3 | 3 |
-| 7. Shopping Cart | 13 | 8 | 4 | 1 |
-| 8. Checkout Flow | 13 | 10 | 3 | 0 |
-| 9. My Account | 12 | 5 | 4 | 3 |
-| 10. Wishlist | 7 | 5 | 0 | 2 |
-| 11. Product Comparison | 4 | 0 | 2 | 2 |
-| 12. Content / Static Pages | 10 | 0 | 2 | 8 |
-| 13. End-to-End Flows | 10 | 7 | 3 | 0 |
-| **Total** | **149** | **69** | **51** | **29** |
+| Module | Total | Implemented | Planned | Spec File |
+|--------|-------|-------------|---------|-----------|
+| 1. Registration | 8 | 8 | 0 | `user_registration.spec.ts` |
+| 2. Authentication (Login/Logout) | 8 | 8 | 0 | `user_authentication.spec.ts` |
+| 3. Home Page | 9 | 9 | 0 | `home_page.spec.ts` |
+| 4. Product Search | 12 | 12 | 0 | `product_search.spec.ts` |
+| 5A. Books | 8 | 8 | 0 | `category_books.spec.ts` |
+| 5B. Computers | 7 | 7 | 0 | `category_computers.spec.ts` |
+| 5C. Electronics | 5 | 5 | 0 | `category_electronics.spec.ts` |
+| 5D. Apparel & Shoes | 5 | 5 | 0 | `category_apparel.spec.ts` |
+| 5E. Digital Downloads | 3 | 3 | 0 | `category_digital_downloads.spec.ts` |
+| 5F. Jewelry | 4 | 4 | 0 | `category_jewelry.spec.ts` |
+| 5G. Gift Cards | 4 | 4 | 0 | `category_gift_cards.spec.ts` |
+| 6. Product Detail Page | 12 | 2 | 10 | Planned |
+| 7. Shopping Cart | 13 | 5 | 8 | Planned |
+| 8. Checkout Flow | 13 | 7 | 6 | Planned |
+| 9. My Account | 12 | 0 | 12 | Planned |
+| 10. Wishlist | 7 | 0 | 7 | Planned |
+| 11. Product Comparison | 4 | 0 | 4 | Planned |
+| 12. Content / Static Pages | 10 | 0 | 10 | Planned |
+| 13. End-to-End Flows | 10 | 1 | 9 | `e2e_purchase_flow.spec.ts` + Planned |
+| **Total** | **149** | **88** | **61** | — |
 
 ---
 
 ### Module 1 — User Registration
+**Spec file:** `tests/user_registration.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
 | 1.1 | Register with valid data (male gender) | High | Implemented |
-| 1.2 | Register with valid data (female gender) | High | Planned |
-| 1.3 | Register with duplicate email → error message | High | Planned |
-| 1.4 | Register with blank required fields → validation errors | High | Planned |
-| 1.5 | Register with invalid email format → validation error | High | Planned |
-| 1.6 | Register with mismatched passwords → validation error | High | Planned |
-| 1.7 | Register with weak/short password → validation error | Medium | Planned |
-| 1.8 | Verify auto-login or redirect after successful registration | Medium | Planned |
+| 1.2 | Register with valid data (female gender) | High | Implemented |
+| 1.3 | Register with duplicate email → error message | High | Implemented |
+| 1.4 | Register with blank required fields → validation errors | High | Implemented |
+| 1.5 | Register with invalid email format → validation error | High | Implemented |
+| 1.6 | Register with mismatched passwords → validation error | High | Implemented |
+| 1.7 | Register with weak/short password → validation error | Medium | Implemented |
+| 1.8 | Verify auto-login or redirect after successful registration | Medium | Implemented |
 
 ---
 
 ### Module 2 — User Authentication (Login / Logout)
+**Spec file:** `tests/user_authentication.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
 | 2.1 | Login with valid credentials | High | Implemented |
-| 2.2 | Login with invalid password → error message | High | Planned |
-| 2.3 | Login with unregistered email → error message | High | Planned |
-| 2.4 | Login with blank fields → validation errors | High | Planned |
-| 2.5 | "Remember me" checkbox persists session after browser reopen | Medium | Planned |
-| 2.6 | Forgot password → receive recovery email confirmation message | Medium | Planned |
-| 2.7 | Logout successfully → redirected, session cleared | High | Planned |
-| 2.8 | Access protected page (`/customer/info`) without login → redirect to login | High | Planned |
+| 2.2 | Login with invalid password → error message | High | Implemented |
+| 2.3 | Login with unregistered email → error message | High | Implemented |
+| 2.4 | Login with blank fields → validation errors | High | Implemented |
+| 2.5 | "Remember me" checkbox persists session after browser reopen | Medium | Implemented |
+| 2.6 | Forgot password → receive recovery email confirmation message | Medium | Implemented |
+| 2.7 | Logout successfully → redirected, session cleared | High | Implemented |
+| 2.8 | Access protected page (`/customer/info`) without login → redirect to login | High | Implemented |
 
 ---
 
 ### Module 3 — Home Page
+**Spec file:** `tests/home_page.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 3.1 | Verify 6 featured products are displayed | Medium | Planned |
-| 3.2 | Verify all main category navigation links are visible | Medium | Planned |
-| 3.3 | Verify subcategory flyout menus (Computers: Desktops / Notebooks / Accessories) | Medium | Planned |
-| 3.4 | Verify popular tags cloud is displayed | Low | Planned |
-| 3.5 | Newsletter signup with valid email → success message | Medium | Planned |
-| 3.6 | Newsletter signup with invalid email → error | Low | Planned |
-| 3.7 | Community poll: submit a vote and verify updated result | Low | Planned |
-| 3.8 | Flyout cart on header hover shows cart items and subtotal | Low | Planned |
-| 3.9 | Click featured product → navigates to correct product detail page | Medium | Planned |
+| 3.1 | Verify 6 featured products are displayed | Medium | Implemented |
+| 3.2 | Verify all main category navigation links are visible | Medium | Implemented |
+| 3.3 | Verify subcategory flyout menus (Computers: Desktops / Notebooks / Accessories) | Medium | Implemented |
+| 3.4 | Verify popular tags cloud is displayed | Low | Implemented |
+| 3.5 | Newsletter signup with valid email → success message | Medium | Implemented |
+| 3.6 | Newsletter signup with invalid email → error | Low | Implemented |
+| 3.7 | Community poll: submit a vote and verify updated result | Low | Implemented |
+| 3.8 | Flyout cart on header hover shows cart items and subtotal | Low | Implemented |
+| 3.9 | Click featured product → navigates to correct product detail page | Medium | Implemented |
 
 ---
 
 ### Module 4 — Product Search
+**Spec file:** `tests/product_search.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
 | 4.1 | Search with valid keyword returns matching results | High | Implemented |
-| 4.2 | Search with empty keyword → validation message | High | Planned |
-| 4.3 | Search with keyword yielding no results → "No products were found" | High | Planned |
-| 4.4 | Search autocomplete suggestions appear on input | Medium | Planned |
-| 4.5 | Advanced search: filter results by category dropdown | Medium | Planned |
-| 4.6 | Advanced search: filter results by price range (From / To) | Medium | Planned |
-| 4.7 | Advanced search: "Automatically search sub categories" checkbox | Medium | Planned |
-| 4.8 | Advanced search: filter by manufacturer (Tricentis) | Low | Planned |
-| 4.9 | Advanced search: "Search in product descriptions" checkbox | Low | Planned |
-| 4.10 | Search results: sort by Name A-Z / Z-A / Price Low-High / Price High-Low | Medium | Planned |
-| 4.11 | Search results: change items per page (4 / 8 / 12) | Low | Planned |
-| 4.12 | Search results: switch between Grid and List view | Low | Planned |
+| 4.2 | Search with empty keyword → validation message | High | Implemented |
+| 4.3 | Search with keyword yielding no results → "No products were found" | High | Implemented |
+| 4.4 | Search autocomplete suggestions appear on input | Medium | Implemented |
+| 4.5 | Advanced search: filter results by category dropdown | Medium | Implemented |
+| 4.6 | Advanced search: filter results by price range (From / To) | Medium | Implemented |
+| 4.7 | Advanced search: "Automatically search sub categories" checkbox | Medium | Implemented |
+| 4.8 | Advanced search: filter by manufacturer (Tricentis) | Low | Implemented |
+| 4.9 | Advanced search: "Search in product descriptions" checkbox | Low | Implemented |
+| 4.10 | Search results: sort by Name A-Z / Z-A / Price Low-High / Price High-Low | Medium | Implemented |
+| 4.11 | Search results: change items per page (4 / 8 / 12) | Low | Implemented |
+| 4.12 | Search results: switch between Grid and List view | Low | Implemented |
 
 ---
 
 ### Module 5 — Category Pages
 
+Each sub-module has its own dedicated spec file under `tests/`.
+
 #### 5A. Books (`/books`)
+**Spec file:** `tests/category_books.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5A.1 | All 6 books are listed with correct names and prices | Medium | Planned |
-| 5A.2 | Filter by price range: Under $25.00 | Medium | Planned |
-| 5A.3 | Filter by price range: $25.00 – $50.00 | Medium | Planned |
-| 5A.4 | Filter by price range: Over $50.00 | Medium | Planned |
-| 5A.5 | Sort products by Name A-Z, Z-A, Price Low-High, Price High-Low | Medium | Planned |
-| 5A.6 | Switch items per page (4 / 8 / 12) | Low | Planned |
-| 5A.7 | Switch between Grid and List view | Low | Planned |
+| 5A.1 | All 6 books are listed with correct names and prices | Medium | Implemented |
+| 5A.2 | Filter by price range: Under $25.00 | Medium | Implemented |
+| 5A.3 | Filter by price range: $25.00 – $50.00 | Medium | Implemented |
+| 5A.4 | Filter by price range: Over $50.00 | Medium | Implemented |
+| 5A.5 | Sort products by Name A-Z, Z-A, Price Low-High, Price High-Low | Medium | Implemented |
+| 5A.6 | Switch items per page (4 / 8 / 12) | Low | Implemented |
+| 5A.7 | Switch between Grid and List view | Low | Implemented |
 | 5A.8 | Click product → navigate to product detail page | High | Implemented |
 
 #### 5B. Computers (`/computers`)
+**Spec file:** `tests/category_computers.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5B.1 | Three subcategory tiles (Desktops, Notebooks, Accessories) are shown | Medium | Planned |
-| 5B.2 | Click Desktops → navigate to `/desktops` | High | Planned |
-| 5B.3 | Click Notebooks → navigate to `/notebooks` | High | Planned |
-| 5B.4 | Click Accessories → navigate to `/accessories` | High | Planned |
-| 5B.5 | Desktops: configure and add a custom computer to cart | High | Planned |
-| 5B.6 | Notebooks: sort and add a notebook to cart | Medium | Planned |
-| 5B.7 | Accessories: filter and add an accessory to cart | Medium | Planned |
+| 5B.1 | Three subcategory tiles (Desktops, Notebooks, Accessories) are shown | Medium | Implemented |
+| 5B.2 | Click Desktops → navigate to `/desktops` | High | Implemented |
+| 5B.3 | Click Notebooks → navigate to `/notebooks` | High | Implemented |
+| 5B.4 | Click Accessories → navigate to `/accessories` | High | Implemented |
+| 5B.5 | Desktops: configure and add a custom computer to cart | High | Implemented |
+| 5B.6 | Notebooks: sort and add a notebook to cart | Medium | Implemented |
+| 5B.7 | Accessories: filter and add an accessory to cart | Medium | Implemented |
 
 #### 5C. Electronics (`/electronics`)
+**Spec file:** `tests/category_electronics.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5C.1 | Two subcategory tiles (Camera/Photo, Cell Phones) are shown | Medium | Planned |
-| 5C.2 | Click Camera/Photo → navigate to `/camera-photo` | High | Planned |
-| 5C.3 | Click Cell Phones → navigate to `/cell-phones` | High | Planned |
-| 5C.4 | Add a camera product to cart | Medium | Planned |
-| 5C.5 | Add a cell phone to cart | Medium | Planned |
+| 5C.1 | Two subcategory tiles (Camera/Photo, Cell Phones) are shown | Medium | Implemented |
+| 5C.2 | Click Camera/Photo → navigate to `/camera-photo` | High | Implemented |
+| 5C.3 | Click Cell Phones → navigate to `/cell-phones` | High | Implemented |
+| 5C.4 | Add a camera product to cart | Medium | Implemented |
+| 5C.5 | Add a cell phone to cart | Medium | Implemented |
 
 #### 5D. Apparel & Shoes (`/apparel-shoes`)
+**Spec file:** `tests/category_apparel.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5D.1 | Products listed with correct names and prices | Medium | Planned |
-| 5D.2 | Pagination works (Page 1 → Page 2) | Medium | Planned |
-| 5D.3 | Sort by price low-to-high | Medium | Planned |
-| 5D.4 | Add an apparel item to cart | Medium | Planned |
-| 5D.5 | Add item requiring size/color attribute selection to cart | Medium | Planned |
+| 5D.1 | Products listed with correct names and prices | Medium | Implemented |
+| 5D.2 | Pagination works (Page 1 → Page 2) | Medium | Implemented |
+| 5D.3 | Sort by price low-to-high | Medium | Implemented |
+| 5D.4 | Add an apparel item to cart | Medium | Implemented |
+| 5D.5 | Add item requiring size/color attribute selection to cart | Medium | Implemented |
 
 #### 5E. Digital Downloads (`/digital-downloads`)
+**Spec file:** `tests/category_digital_downloads.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5E.1 | All 3 digital products listed with correct prices | Medium | Planned |
-| 5E.2 | Add a digital download to cart | Medium | Planned |
-| 5E.3 | Digital download product page shows download info | Low | Planned |
+| 5E.1 | All 3 digital products listed with correct prices | Medium | Implemented |
+| 5E.2 | Add a digital download to cart | Medium | Implemented |
+| 5E.3 | Digital download product page shows download info | Low | Implemented |
 
 #### 5F. Jewelry (`/jewelry`)
+**Spec file:** `tests/category_jewelry.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5F.1 | All 5 jewelry items listed with correct prices | Medium | Planned |
-| 5F.2 | Filter by price range ($0–$500 / $500–$700 / $700–$3000) | Medium | Planned |
-| 5F.3 | "Create Your Own Jewelry" with custom attributes | Medium | Planned |
-| 5F.4 | Add a standard jewelry item to cart | Medium | Planned |
+| 5F.1 | All 5 jewelry items listed with correct prices | Medium | Implemented |
+| 5F.2 | Filter by price range ($0–$500 / $500–$700 / $700–$3000) | Medium | Implemented |
+| 5F.3 | "Create Your Own Jewelry" with custom attributes | Medium | Implemented |
+| 5F.4 | Add a standard jewelry item to cart | Medium | Implemented |
 
 #### 5G. Gift Cards (`/gift-cards`)
+**Spec file:** `tests/category_gift_cards.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 5G.1 | All 4 gift card products listed with correct prices | Medium | Planned |
-| 5G.2 | Add virtual gift card ($5 / $25) with recipient details | High | Planned |
-| 5G.3 | Add physical gift card ($50 / $100) to cart | Medium | Planned |
-| 5G.4 | Verify gift card form fields: sender name, recipient name, email, message | High | Planned |
+| 5G.1 | All 4 gift card products listed with correct prices | Medium | Implemented |
+| 5G.2 | Add virtual gift card ($5 / $25) with recipient details | High | Implemented |
+| 5G.3 | Add physical gift card ($50 / $100) to cart | Medium | Implemented |
+| 5G.4 | Verify gift card form fields: sender name, recipient name, email, message | High | Implemented |
 
 ---
 
@@ -1287,9 +1317,43 @@ npm test
 
 ### Run a specific test file
 ```bash
+# Original E2E flows
 npx playwright test tests/registration.spec.ts
 npx playwright test tests/registration_login.spec.ts
 npx playwright test tests/e2e_purchase_flow.spec.ts
+
+# Module 1 — User Registration
+npx playwright test tests/user_registration.spec.ts
+
+# Module 2 — User Authentication (Login / Logout)
+npx playwright test tests/user_authentication.spec.ts
+
+# Module 3 — Home Page
+npx playwright test tests/home_page.spec.ts
+
+# Module 4 — Product Search
+npx playwright test tests/product_search.spec.ts
+
+# Module 5 — Category Pages (run all or individually)
+npx playwright test tests/category_books.spec.ts
+npx playwright test tests/category_computers.spec.ts
+npx playwright test tests/category_electronics.spec.ts
+npx playwright test tests/category_apparel.spec.ts
+npx playwright test tests/category_digital_downloads.spec.ts
+npx playwright test tests/category_jewelry.spec.ts
+npx playwright test tests/category_gift_cards.spec.ts
+
+# Run all category specs together
+npx playwright test --grep "Module 5"
+```
+
+### Run tests by module tag
+```bash
+# Run by Allure tag (requires test:allure)
+npx playwright test --grep "Registration"
+npx playwright test --grep "Login"
+npx playwright test --grep "Search"
+npx playwright test --grep "Books"
 ```
 
 ### Run in headed mode (visible browser — great for demos)
