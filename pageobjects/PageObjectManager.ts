@@ -4,6 +4,9 @@ import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 import { CartPage } from './CartPage';
 import { WishlistPage } from './WishlistPage';
+import { BooksPage } from './BooksPage';
+import { ComputersPage } from './ComputersPage';
+import { ElectronicsPage } from './ElectronicsPage';
 
 export class PageObjectManager {
   readonly page: Page;
@@ -13,6 +16,9 @@ export class PageObjectManager {
   private registerPage: RegisterPage;
   private cartPage: CartPage;
   private wishlistPage: WishlistPage;
+  private booksPage: BooksPage;
+  private computersPage: ComputersPage;
+  private electronicsPage: ElectronicsPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +28,9 @@ export class PageObjectManager {
     this.registerPage = new RegisterPage(page);
     this.cartPage = new CartPage(page);
     this.wishlistPage = new WishlistPage(page);
+    this.booksPage = new BooksPage(page);
+    this.computersPage = new ComputersPage(page);
+    this.electronicsPage = new ElectronicsPage(page);
   }
 
   getHomePage(): HomePage {
@@ -42,5 +51,17 @@ export class PageObjectManager {
 
   getWishlistPage(): WishlistPage {
     return this.wishlistPage;
+  }
+
+  getBooksPage(): BooksPage {
+    return this.booksPage;
+  }
+
+  getComputersPage(): ComputersPage {
+    return this.computersPage;
+  }
+
+  getElectronicsPage(): ElectronicsPage {
+    return this.electronicsPage;
   }
 }
