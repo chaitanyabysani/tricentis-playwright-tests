@@ -1,0 +1,9 @@
+{
+  "newUser": {
+    "gender": "male",
+    "firstName": "John",
+    "lastName": "Doe",
+    "emailPrefix": "johndoe",
+    "password": "Test@1234"
+  }
+}
