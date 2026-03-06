@@ -14,6 +14,7 @@ Automated end-to-end test suite for [https://demowebshop.tricentis.com](https://
 - [Page Objects](#page-objects)
 - [Utilities](#utilities)
 - [Test Scenarios](#test-scenarios)
+- [Comprehensive Test Scenario Coverage](#comprehensive-test-scenario-coverage)
 - [NPM Scripts](#npm-scripts)
 - [Running Tests](#running-tests)
 - [Reports](#reports)
@@ -947,6 +948,312 @@ Step 16: Verify order confirmation page
   ├── Verify order completed section is visible
   └── Capture and assert order number
 ```
+
+---
+
+## Comprehensive Test Scenario Coverage
+
+Full scenario list covering all functional areas of the application. **149 total scenarios** across 13 modules.
+
+> Scenarios marked as **[Implemented]** are already automated. All others are planned for future implementation.
+
+---
+
+### Scenario Summary
+
+| Module | Total | High | Medium | Low |
+|--------|-------|------|--------|-----|
+| 1. Registration | 8 | 6 | 2 | 0 |
+| 2. Authentication (Login/Logout) | 8 | 6 | 2 | 0 |
+| 3. Home Page | 9 | 0 | 4 | 5 |
+| 4. Product Search | 12 | 3 | 6 | 3 |
+| 5. Category Pages | 31 | 13 | 16 | 2 |
+| 6. Product Detail Page | 12 | 6 | 3 | 3 |
+| 7. Shopping Cart | 13 | 8 | 4 | 1 |
+| 8. Checkout Flow | 13 | 10 | 3 | 0 |
+| 9. My Account | 12 | 5 | 4 | 3 |
+| 10. Wishlist | 7 | 5 | 0 | 2 |
+| 11. Product Comparison | 4 | 0 | 2 | 2 |
+| 12. Content / Static Pages | 10 | 0 | 2 | 8 |
+| 13. End-to-End Flows | 10 | 7 | 3 | 0 |
+| **Total** | **149** | **69** | **51** | **29** |
+
+---
+
+### Module 1 — User Registration
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 1.1 | Register with valid data (male gender) | High | Implemented |
+| 1.2 | Register with valid data (female gender) | High | Planned |
+| 1.3 | Register with duplicate email → error message | High | Planned |
+| 1.4 | Register with blank required fields → validation errors | High | Planned |
+| 1.5 | Register with invalid email format → validation error | High | Planned |
+| 1.6 | Register with mismatched passwords → validation error | High | Planned |
+| 1.7 | Register with weak/short password → validation error | Medium | Planned |
+| 1.8 | Verify auto-login or redirect after successful registration | Medium | Planned |
+
+---
+
+### Module 2 — User Authentication (Login / Logout)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 2.1 | Login with valid credentials | High | Implemented |
+| 2.2 | Login with invalid password → error message | High | Planned |
+| 2.3 | Login with unregistered email → error message | High | Planned |
+| 2.4 | Login with blank fields → validation errors | High | Planned |
+| 2.5 | "Remember me" checkbox persists session after browser reopen | Medium | Planned |
+| 2.6 | Forgot password → receive recovery email confirmation message | Medium | Planned |
+| 2.7 | Logout successfully → redirected, session cleared | High | Planned |
+| 2.8 | Access protected page (`/customer/info`) without login → redirect to login | High | Planned |
+
+---
+
+### Module 3 — Home Page
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 3.1 | Verify 6 featured products are displayed | Medium | Planned |
+| 3.2 | Verify all main category navigation links are visible | Medium | Planned |
+| 3.3 | Verify subcategory flyout menus (Computers: Desktops / Notebooks / Accessories) | Medium | Planned |
+| 3.4 | Verify popular tags cloud is displayed | Low | Planned |
+| 3.5 | Newsletter signup with valid email → success message | Medium | Planned |
+| 3.6 | Newsletter signup with invalid email → error | Low | Planned |
+| 3.7 | Community poll: submit a vote and verify updated result | Low | Planned |
+| 3.8 | Flyout cart on header hover shows cart items and subtotal | Low | Planned |
+| 3.9 | Click featured product → navigates to correct product detail page | Medium | Planned |
+
+---
+
+### Module 4 — Product Search
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 4.1 | Search with valid keyword returns matching results | High | Implemented |
+| 4.2 | Search with empty keyword → validation message | High | Planned |
+| 4.3 | Search with keyword yielding no results → "No products were found" | High | Planned |
+| 4.4 | Search autocomplete suggestions appear on input | Medium | Planned |
+| 4.5 | Advanced search: filter results by category dropdown | Medium | Planned |
+| 4.6 | Advanced search: filter results by price range (From / To) | Medium | Planned |
+| 4.7 | Advanced search: "Automatically search sub categories" checkbox | Medium | Planned |
+| 4.8 | Advanced search: filter by manufacturer (Tricentis) | Low | Planned |
+| 4.9 | Advanced search: "Search in product descriptions" checkbox | Low | Planned |
+| 4.10 | Search results: sort by Name A-Z / Z-A / Price Low-High / Price High-Low | Medium | Planned |
+| 4.11 | Search results: change items per page (4 / 8 / 12) | Low | Planned |
+| 4.12 | Search results: switch between Grid and List view | Low | Planned |
+
+---
+
+### Module 5 — Category Pages
+
+#### 5A. Books (`/books`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5A.1 | All 6 books are listed with correct names and prices | Medium | Planned |
+| 5A.2 | Filter by price range: Under $25.00 | Medium | Planned |
+| 5A.3 | Filter by price range: $25.00 – $50.00 | Medium | Planned |
+| 5A.4 | Filter by price range: Over $50.00 | Medium | Planned |
+| 5A.5 | Sort products by Name A-Z, Z-A, Price Low-High, Price High-Low | Medium | Planned |
+| 5A.6 | Switch items per page (4 / 8 / 12) | Low | Planned |
+| 5A.7 | Switch between Grid and List view | Low | Planned |
+| 5A.8 | Click product → navigate to product detail page | High | Implemented |
+
+#### 5B. Computers (`/computers`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5B.1 | Three subcategory tiles (Desktops, Notebooks, Accessories) are shown | Medium | Planned |
+| 5B.2 | Click Desktops → navigate to `/desktops` | High | Planned |
+| 5B.3 | Click Notebooks → navigate to `/notebooks` | High | Planned |
+| 5B.4 | Click Accessories → navigate to `/accessories` | High | Planned |
+| 5B.5 | Desktops: configure and add a custom computer to cart | High | Planned |
+| 5B.6 | Notebooks: sort and add a notebook to cart | Medium | Planned |
+| 5B.7 | Accessories: filter and add an accessory to cart | Medium | Planned |
+
+#### 5C. Electronics (`/electronics`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5C.1 | Two subcategory tiles (Camera/Photo, Cell Phones) are shown | Medium | Planned |
+| 5C.2 | Click Camera/Photo → navigate to `/camera-photo` | High | Planned |
+| 5C.3 | Click Cell Phones → navigate to `/cell-phones` | High | Planned |
+| 5C.4 | Add a camera product to cart | Medium | Planned |
+| 5C.5 | Add a cell phone to cart | Medium | Planned |
+
+#### 5D. Apparel & Shoes (`/apparel-shoes`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5D.1 | Products listed with correct names and prices | Medium | Planned |
+| 5D.2 | Pagination works (Page 1 → Page 2) | Medium | Planned |
+| 5D.3 | Sort by price low-to-high | Medium | Planned |
+| 5D.4 | Add an apparel item to cart | Medium | Planned |
+| 5D.5 | Add item requiring size/color attribute selection to cart | Medium | Planned |
+
+#### 5E. Digital Downloads (`/digital-downloads`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5E.1 | All 3 digital products listed with correct prices | Medium | Planned |
+| 5E.2 | Add a digital download to cart | Medium | Planned |
+| 5E.3 | Digital download product page shows download info | Low | Planned |
+
+#### 5F. Jewelry (`/jewelry`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5F.1 | All 5 jewelry items listed with correct prices | Medium | Planned |
+| 5F.2 | Filter by price range ($0–$500 / $500–$700 / $700–$3000) | Medium | Planned |
+| 5F.3 | "Create Your Own Jewelry" with custom attributes | Medium | Planned |
+| 5F.4 | Add a standard jewelry item to cart | Medium | Planned |
+
+#### 5G. Gift Cards (`/gift-cards`)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 5G.1 | All 4 gift card products listed with correct prices | Medium | Planned |
+| 5G.2 | Add virtual gift card ($5 / $25) with recipient details | High | Planned |
+| 5G.3 | Add physical gift card ($50 / $100) to cart | Medium | Planned |
+| 5G.4 | Verify gift card form fields: sender name, recipient name, email, message | High | Planned |
+
+---
+
+### Module 6 — Product Detail Page
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 6.1 | Product name, price, and description are displayed correctly | High | Planned |
+| 6.2 | Add to cart with default quantity (1) | High | Implemented |
+| 6.3 | Add to cart with quantity greater than 1 | High | Planned |
+| 6.4 | "Added to your shopping cart" bar notification appears | High | Implemented |
+| 6.5 | Add product to wishlist from product detail page | High | Planned |
+| 6.6 | Configurable product page renders all attribute options (Build your own computer) | High | Planned |
+| 6.7 | Configure computer: choose processor, RAM, HDD, OS, software | High | Planned |
+| 6.8 | Product price updates dynamically based on selected configuration | Medium | Planned |
+| 6.9 | Add product to compare list from product listing | Low | Planned |
+| 6.10 | Submit a product review when logged in | Medium | Planned |
+| 6.11 | "Email a friend" link navigates to email form | Low | Planned |
+| 6.12 | Social media share links are visible on product page | Low | Planned |
+
+---
+
+### Module 7 — Shopping Cart
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 7.1 | Cart displays correct product name, unit price, quantity, and subtotal | High | Implemented |
+| 7.2 | Update product quantity in cart → subtotal recalculates correctly | High | Planned |
+| 7.3 | Remove item from cart → cart becomes empty | High | Planned |
+| 7.4 | Cart item count badge in header updates correctly after add/remove | High | Implemented |
+| 7.5 | Estimate shipping: select country/state, enter zip → rates displayed | High | Implemented |
+| 7.6 | Apply valid coupon code → discount applied to order total | Medium | Planned |
+| 7.7 | Apply invalid coupon code → error message displayed | Medium | Planned |
+| 7.8 | Apply gift card code → balance deducted from order total | Medium | Planned |
+| 7.9 | Terms of Service checkbox must be accepted before checkout | High | Implemented |
+| 7.10 | Proceeding to checkout without accepting ToS → blocked with error | High | Planned |
+| 7.11 | Header flyout cart shows added items and subtotal on hover | Medium | Planned |
+| 7.12 | "Continue shopping" from cart → returns to previous page | Low | Planned |
+| 7.13 | Cart contents persist after browser refresh for a logged-in user | Medium | Planned |
+
+---
+
+### Module 8 — Checkout Flow
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 8.1 | Complete checkout as a guest (no account required) | High | Planned |
+| 8.2 | Complete checkout as a registered / logged-in user | High | Implemented |
+| 8.3 | Billing address: fill all required fields and continue | High | Implemented |
+| 8.4 | Billing address: leave required fields blank → validation errors shown | High | Planned |
+| 8.5 | Use an existing saved address for billing | Medium | Planned |
+| 8.6 | Toggle "Ship to different address" and fill separate shipping address | Medium | Planned |
+| 8.7 | Select Ground shipping method and continue | High | Implemented |
+| 8.8 | Select Next Day Air shipping method and verify updated cost | Medium | Planned |
+| 8.9 | Select "Check / Money Order" payment method and confirm | High | Implemented |
+| 8.10 | Select Credit Card payment method (if available) and confirm | Medium | Planned |
+| 8.11 | Order confirmation page displays a valid order number | High | Implemented |
+| 8.12 | Order confirmation page displays correct items and order total | High | Planned |
+| 8.13 | "Thank you" / order completed page is displayed after order submission | High | Implemented |
+
+---
+
+### Module 9 — My Account (Authenticated)
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 9.1 | View and edit customer info (name, email, gender, date of birth) | High | Planned |
+| 9.2 | Change password with valid old and new password | High | Planned |
+| 9.3 | Change password with wrong old password → error message | High | Planned |
+| 9.4 | View order history list in My Account | High | Planned |
+| 9.5 | View individual order details (products, total, status) | High | Planned |
+| 9.6 | Add a new shipping address | Medium | Planned |
+| 9.7 | Edit an existing shipping address | Medium | Planned |
+| 9.8 | Delete a shipping address | Medium | Planned |
+| 9.9 | View downloadable products section (for digital download purchases) | Medium | Planned |
+| 9.10 | View back-in-stock subscriptions | Low | Planned |
+| 9.11 | View reward points balance | Low | Planned |
+| 9.12 | Manage newsletter subscription preference (subscribe / unsubscribe) | Low | Planned |
+
+---
+
+### Module 10 — Wishlist
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 10.1 | Add a product to wishlist when logged in | High | Planned |
+| 10.2 | View wishlist → product appears with correct name and price | High | Planned |
+| 10.3 | Move a wishlist item to shopping cart | High | Planned |
+| 10.4 | Remove an item from the wishlist | High | Planned |
+| 10.5 | Attempt to add to wishlist when not logged in → redirect to login | High | Planned |
+| 10.6 | Share wishlist via public shareable link | Low | Planned |
+| 10.7 | Update quantity of a wishlist item | Low | Planned |
+
+---
+
+### Module 11 — Product Comparison
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 11.1 | Add 2 products to the compare list | Medium | Planned |
+| 11.2 | View comparison table → products displayed side by side | Medium | Planned |
+| 11.3 | Remove a product from the comparison table | Low | Planned |
+| 11.4 | Clear the entire comparison list | Low | Planned |
+
+---
+
+### Module 12 — Content / Static Pages
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 12.1 | About Us page loads successfully (`/aboutus`) | Low | Planned |
+| 12.2 | Contact Us page: submit form with valid data → success message | Medium | Planned |
+| 12.3 | Contact Us page: submit with blank required fields → validation errors | Medium | Planned |
+| 12.4 | Sitemap page loads with all category links visible | Low | Planned |
+| 12.5 | Privacy Notice page loads correctly | Low | Planned |
+| 12.6 | Conditions of Use page loads correctly | Low | Planned |
+| 12.7 | Shipping & Returns page loads correctly | Low | Planned |
+| 12.8 | News Blog page loads and lists articles | Low | Planned |
+| 12.9 | New Products page loads and shows recently added items | Low | Planned |
+| 12.10 | Recently Viewed Products page shows previously browsed items | Low | Planned |
+
+---
+
+### Module 13 — End-to-End Cross-Module Flows
+
+| ID | Scenario | Priority | Status |
+|----|----------|----------|--------|
+| 13.1 | Register → Login → Search → Add to Cart → Checkout → Order Confirmation | High | Implemented |
+| 13.2 | Login → Browse category → Apply filter/sort → Add to Cart → Checkout | High | Planned |
+| 13.3 | Login → Add product to Wishlist → Move to Cart → Checkout | High | Planned |
+| 13.4 | Guest checkout: no account → complete full purchase | High | Planned |
+| 13.5 | Login → Configure custom computer → Add to cart → Checkout | High | Planned |
+| 13.6 | Login → Add gift card with recipient info → Checkout | Medium | Planned |
+| 13.7 | Login → Add multiple different products → Checkout with combined order | Medium | Planned |
+| 13.8 | Login → Apply coupon code → Checkout with discount applied | Medium | Planned |
+| 13.9 | Login → Estimate shipping in cart → Verify total includes shipping cost | Medium | Planned |
+| 13.10 | Register → Complete purchase → View order in My Account order history | High | Planned |
 
 ---
 
