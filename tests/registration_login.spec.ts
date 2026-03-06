@@ -156,7 +156,7 @@ test('E2E: Register a new user and login with saved credentials', async ({ page 
     });
 
     await step('Verify user is logged in — account link is visible in header', async () => {
-      await expect(page.locator('.account')).toBeVisible();
+      await expect(page.locator('.account').first()).toBeVisible();
     });
 
     await step('Verify user is logged in — logout button is visible in header', async () => {

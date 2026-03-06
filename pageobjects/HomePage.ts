@@ -6,6 +6,8 @@ export class HomePage {
   // Header
   readonly registerLink: Locator;
   readonly loginLink: Locator;
+  readonly accountLink: Locator;
+  readonly logoutLink: Locator;
   readonly cartLink: Locator;
   readonly wishlistLink: Locator;
   readonly logoLink: Locator;
@@ -33,6 +35,8 @@ export class HomePage {
     // Header
     this.registerLink = page.getByRole('link', { name: 'Register' });
     this.loginLink = page.getByRole('link', { name: 'Log in' });
+    this.accountLink = page.locator('.account').first();
+    this.logoutLink = page.locator('.ico-logout');
     this.cartLink = page.locator('.cart-qty');
     this.wishlistLink = page.locator('.wishlist-qty');
     this.logoLink = page.locator('.header-logo a');
