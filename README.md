@@ -78,7 +78,8 @@ tricentis-playwright-tests/
 │   ├── category_apparel.spec.ts                 # Module 5D — Apparel & Shoes (5 scenarios)
 │   ├── category_digital_downloads.spec.ts       # Module 5E — Digital Downloads (3 scenarios)
 │   ├── category_jewelry.spec.ts                 # Module 5F — Jewelry (4 scenarios)
-│   └── category_gift_cards.spec.ts              # Module 5G — Gift Cards (4 scenarios)
+│   ├── category_gift_cards.spec.ts              # Module 5G — Gift Cards (4 scenarios)
+│   └── product_detail_page.spec.ts              # Module 6 — Product Detail Page (12 scenarios)
 │
 ├── utils/                              # Utilities and test data
 │   ├── testdata.json                   # Static input data for tests
@@ -985,7 +986,7 @@ Full scenario list covering all functional areas of the application. **149 total
 | 5E. Digital Downloads | 3 | 3 | 0 | `category_digital_downloads.spec.ts` |
 | 5F. Jewelry | 4 | 4 | 0 | `category_jewelry.spec.ts` |
 | 5G. Gift Cards | 4 | 4 | 0 | `category_gift_cards.spec.ts` |
-| 6. Product Detail Page | 12 | 2 | 10 | Planned |
+| 6. Product Detail Page | 12 | 12 | 0 | `product_detail_page.spec.ts` |
 | 7. Shopping Cart | 13 | 5 | 8 | Planned |
 | 8. Checkout Flow | 13 | 7 | 6 | Planned |
 | 9. My Account | 12 | 0 | 12 | Planned |
@@ -993,7 +994,7 @@ Full scenario list covering all functional areas of the application. **149 total
 | 11. Product Comparison | 4 | 0 | 4 | Planned |
 | 12. Content / Static Pages | 10 | 0 | 10 | Planned |
 | 13. End-to-End Flows | 10 | 1 | 9 | `e2e_purchase_flow.spec.ts` + Planned |
-| **Total** | **149** | **88** | **61** | — |
+| **Total** | **149** | **100** | **49** | — |
 
 ---
 
@@ -1151,21 +1152,22 @@ Each sub-module has its own dedicated spec file under `tests/`.
 ---
 
 ### Module 6 — Product Detail Page
+**Spec file:** `tests/product_detail_page.spec.ts`
 
 | ID | Scenario | Priority | Status |
 |----|----------|----------|--------|
-| 6.1 | Product name, price, and description are displayed correctly | High | Planned |
+| 6.1 | Product name, price, and description are displayed correctly | High | Implemented |
 | 6.2 | Add to cart with default quantity (1) | High | Implemented |
-| 6.3 | Add to cart with quantity greater than 1 | High | Planned |
+| 6.3 | Add to cart with quantity greater than 1 | High | Implemented |
 | 6.4 | "Added to your shopping cart" bar notification appears | High | Implemented |
-| 6.5 | Add product to wishlist from product detail page | High | Planned |
-| 6.6 | Configurable product page renders all attribute options (Build your own computer) | High | Planned |
-| 6.7 | Configure computer: choose processor, RAM, HDD, OS, software | High | Planned |
-| 6.8 | Product price updates dynamically based on selected configuration | Medium | Planned |
-| 6.9 | Add product to compare list from product listing | Low | Planned |
-| 6.10 | Submit a product review when logged in | Medium | Planned |
-| 6.11 | "Email a friend" link navigates to email form | Low | Planned |
-| 6.12 | Social media share links are visible on product page | Low | Planned |
+| 6.5 | Add product to wishlist from product detail page | High | Implemented |
+| 6.6 | Configurable product page renders all attribute options (Build your own computer) | High | Implemented |
+| 6.7 | Configure computer: choose processor, RAM, HDD, OS, software | High | Implemented |
+| 6.8 | Product price updates dynamically based on selected configuration | Medium | Implemented |
+| 6.9 | Add product to compare list from product listing | Low | Implemented |
+| 6.10 | Submit a product review when logged in | Medium | Implemented |
+| 6.11 | "Email a friend" link navigates to email form | Low | Implemented |
+| 6.12 | Social media share links are visible on product page | Low | Implemented |
 
 ---
 
@@ -1333,6 +1335,9 @@ npx playwright test tests/home_page.spec.ts
 
 # Module 4 — Product Search
 npx playwright test tests/product_search.spec.ts
+
+# Module 6 — Product Detail Page
+npx playwright test tests/product_detail_page.spec.ts
 
 # Module 5 — Category Pages (run all or individually)
 npx playwright test tests/category_books.spec.ts
