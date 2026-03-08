@@ -51,14 +51,14 @@ export class RegisterPage {
 
     // Result
     this.registerResultMessage = page.locator('.result');
-    this.continueButton = page.getByRole('link', { name: 'Continue' });
+    this.continueButton = page.getByRole('button', { name: 'Continue' });
 
     // Validation errors
-    this.firstNameError = page.locator('#FirstName-error');
-    this.lastNameError = page.locator('#LastName-error');
-    this.emailError = page.locator('#Email-error');
-    this.passwordError = page.locator('#Password-error');
-    this.confirmPasswordError = page.locator('#ConfirmPassword-error');
+    this.firstNameError = page.locator('span[data-valmsg-for="FirstName"]');
+    this.lastNameError = page.locator('span[data-valmsg-for="LastName"]');
+    this.emailError = page.locator('span[data-valmsg-for="Email"]');
+    this.passwordError = page.locator('span[data-valmsg-for="Password"]');
+    this.confirmPasswordError = page.locator('span[data-valmsg-for="ConfirmPassword"]');
   }
 
   async goto() {

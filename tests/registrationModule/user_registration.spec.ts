@@ -4,9 +4,9 @@ import {
   descriptionHtml, parameter, attachment, step
 } from 'allure-js-commons';
 import { Severity } from 'allure-js-commons';
-import { PageObjectManager } from '../pageobjects/PageObjectManager';
-import { CredentialManager } from '../utils/CredentialManager';
-import testData from '../utils/testdata.json';
+import { PageObjectManager } from '../../pageobjects/PageObjectManager';
+import { CredentialManager } from '../../utils/CredentialManager';
+import testData from '../../utils/testdata.json';
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 const BASE_META = async () => {
