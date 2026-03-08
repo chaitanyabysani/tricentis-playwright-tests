@@ -1,28 +1,29 @@
 import { test, expect } from '@playwright/test';
-import {
-  epic, feature, story, severity, owner, tag, link,
-  descriptionHtml, parameter, attachment, step
-} from 'allure-js-commons';
+//import {
+  //epic, feature, story, severity, owner, tag, link,
+  //descriptionHtml, parameter, attachment, step
+//} from 'allure-js-commons';
 import { Severity } from 'allure-js-commons';
 import { PageObjectManager } from '../../pageobjects/PageObjectManager';
 import { CredentialManager } from '../../utils/CredentialManager';
 import testData from '../../utils/testdata.json';
+import * as allure from 'allure-js-commons';
 
 test('E2E: Register → Login → Search → Add to Cart → Checkout → Order Confirmation', async ({ page }) => {
 
   // ─── Allure Report Metadata ───────────────────────────────────────────────
-  await epic('E2E Purchase Flow');
-  await feature('Shop & Checkout');
-  await story('As a new user, I register, search for a book, add it to cart, and complete checkout');
-  await severity(Severity.CRITICAL);
-  await owner('QA Team');
-  await tag('E2E');
-  await tag('Regression');
-  await tag('Purchase');
-  await tag('Checkout');
-  await link('https://demowebshop.tricentis.com', 'Application Under Test');
+  await allure.epic('E2E Purchase Flow');
+  await allure.feature('Shop & Checkout');
+  await allure.story('As a new user, I register, search for a book, add it to cart, and complete checkout');
+  await allure.severity(Severity.CRITICAL);
+  await allure.owner('QA Team');
+  await allure.tag('E2E');
+  await allure.tag('Regression');
+  await allure.tag('Purchase');
+  await allure.tag('Checkout');
+  await allure.link('https://demowebshop.tricentis.com', 'Application Under Test');
 
-  await descriptionHtml(`
+  await allure.descriptionHtml(`
     <h2>Test Objective</h2>
     <p>
       Verify the complete <strong>end-to-end purchase flow</strong> on the Tricentis Demo Web Shop —
@@ -76,39 +77,41 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   const uniqueEmail = `${testData.newUser.emailPrefix}+${Date.now()}@test.com`;
   const password = testData.newUser.password;
 
-  await attachment(
-    'Test Input Data',
-    JSON.stringify({
-      firstName: testData.newUser.firstName,
-      lastName: testData.newUser.lastName,
-      email: uniqueEmail,
-      searchTerm: testData.search.term,
-      expectedBook: testData.search.expectedBook,
-      shippingCountry: testData.shipping.country,
-      shippingState: testData.shipping.state,
-      shippingZip: testData.shipping.zip,
-    }, null, 2),
-    'application/json'
-  );
+  // ─── Step 0: Log test input data ─────────────────────────────────────────
+  await test.step('Step 0: Log test input data', async () => {
+    await allure.step('Attach test input payload', async () => {
+      await allure.attachment(
+        'Test Input Data',
+        JSON.stringify({
+          firstName: testData.newUser.firstName,
+          lastName: testData.newUser.lastName,
+          email: uniqueEmail,
+          searchTerm: testData.search.term,
+          expectedBook: testData.search.expectedBook,
+          shippingCountry: testData.shipping.country,
+          shippingState: testData.shipping.state,
+          shippingZip: testData.shipping.zip,
+        }, null, 2),
+        'application/json'
+      );
+    });
+  });
 
   // ─────────────────────────────────────────────────────────────────────────
   // STEP 1: Register a new user
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 1: Register a new user', async () => {
 
-    await step('Navigate to the Registration page', async () => {
+    await allure.step('Navigate to the Registration page', async () => {
       await registerPage.goto();
       await expect(page).toHaveURL(/.*register/);
     });
 
-    await step('Fill in registration details', async () => {
-      await parameter('First Name', testData.newUser.firstName);
-      await parameter('Last Name', testData.newUser.lastName);
-      await parameter('Email', uniqueEmail);
-      await parameter('Password', '***hidden***');
-    });
-
-    await step('Submit registration form and verify success', async () => {
+    await allure.step('Fill registration form and submit', async () => {
+      await allure.parameter('First Name', testData.newUser.firstName);
+      await allure.parameter('Last Name', testData.newUser.lastName);
+      await allure.parameter('Email', uniqueEmail);
+      await allure.parameter('Password', '***hidden***');
       await registerPage.register(
         testData.newUser.gender as 'male' | 'female',
         testData.newUser.firstName,
@@ -116,14 +119,17 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
         uniqueEmail,
         password
       );
-      const result = await registerPage.getRegistrationResult();
-      expect(result).toContain('Your registration completed');
-      await attachment('Registration Result', result, 'text/plain');
     });
 
-    await step('Save registered credentials to credentials.json', async () => {
+    await allure.step('Verify registration success', async () => {
+      const result = await registerPage.getRegistrationResult();
+      expect(result).toContain('Your registration completed');
+      await allure.attachment('Registration Result', result, 'text/plain');
+    });
+
+    await allure.step('Save registered credentials to credentials.json', async () => {
       CredentialManager.save({ email: uniqueEmail, password });
-      await attachment(
+      await allure.attachment(
         'Saved Credentials',
         JSON.stringify({ email: uniqueEmail, password: '***hidden***' }, null, 2),
         'application/json'
@@ -137,18 +143,18 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 2: Login with saved credentials', async () => {
 
-    await step('Navigate to Login page', async () => {
+    await allure.step('Navigate to Login page', async () => {
       await loginPage.goto();
       await expect(page).toHaveURL(/.*login/);
     });
 
-    await step('Enter credentials and submit login form', async () => {
+    await allure.step('Enter credentials and submit login form', async () => {
       const credentials = CredentialManager.load();
-      await parameter('Login Email', credentials.email);
+      await allure.parameter('Login Email', credentials.email);
       await loginPage.login(credentials.email, credentials.password);
     });
 
-    await step('Verify user is logged in', async () => {
+    await allure.step('Verify user is logged in', async () => {
       await expect(page.locator('.account').first()).toBeVisible();
       await expect(page.locator('.ico-logout')).toBeVisible();
     });
@@ -160,20 +166,20 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 3: Search for a book', async () => {
 
-    await step(`Search for "${testData.search.term}" using the header search box`, async () => {
-      await parameter('Search Term', testData.search.term);
+    await allure.step(`Search for "${testData.search.term}" using the header search box`, async () => {
+      await allure.parameter('Search Term', testData.search.term);
       await homePage.search(testData.search.term);
     });
 
-    await step('Verify search results page loaded with results', async () => {
+    await allure.step('Verify search results page loaded with results', async () => {
       await expect(page).toHaveURL(/.*search/);
       const hasResults = await searchResultsPage.hasResults();
       expect(hasResults).toBeTruthy();
       const productNames = await searchResultsPage.getProductNames();
-      await attachment('Search Results', productNames.join('\n'), 'text/plain');
+      await allure.attachment('Search Results', productNames.join('\n'), 'text/plain');
     });
 
-    await step(`Verify "${testData.search.expectedBook}" appears in results`, async () => {
+    await allure.step(`Verify "${testData.search.expectedBook}" appears in results`, async () => {
       const productNames = await searchResultsPage.getProductNames();
       const found = productNames.some(name =>
         name.toLowerCase().includes(testData.search.expectedBook.toLowerCase())
@@ -188,12 +194,12 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 4: Open the book and add it to the cart', async () => {
 
-    await step(`Click on "${testData.search.expectedBook}" to open product page`, async () => {
+    await allure.step(`Click on "${testData.search.expectedBook}" to open product page`, async () => {
       await searchResultsPage.clickProduct(testData.search.expectedBook);
       await expect(page).not.toHaveURL(/.*search/);
     });
 
-    await step('Click "Add to cart" button on product page', async () => {
+    await allure.step('Click "Add to cart" button on product page', async () => {
       await productPage.addToCart();
     });
 
@@ -204,9 +210,9 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 5: Verify "added to cart" notification bar', async () => {
 
-    await step('Wait for and read the bar notification message', async () => {
+    await allure.step('Wait for and read the bar notification message', async () => {
       const notificationText = await productPage.getBarNotificationText();
-      await attachment('Bar Notification Text', notificationText, 'text/plain');
+      await allure.attachment('Bar Notification Text', notificationText, 'text/plain');
       expect(notificationText.toLowerCase()).toContain('added to your shopping cart');
     });
 
@@ -217,9 +223,9 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 6: Verify shopping cart count in the header', async () => {
 
-    await step('Read the cart count from the header link', async () => {
+    await allure.step('Read the cart count from the header link', async () => {
       const cartCountText = await page.locator('.cart-qty').innerText();
-      await attachment('Cart Count Text', cartCountText, 'text/plain');
+      await allure.attachment('Cart Count Text', cartCountText, 'text/plain');
       expect(cartCountText).toContain('1');
     });
 
@@ -230,7 +236,7 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 7: Navigate to the shopping cart', async () => {
 
-    await step('Click the cart link in the header', async () => {
+    await allure.step('Click the cart link in the header', async () => {
       await page.locator('.cart-qty').click();
       await expect(page).toHaveURL(/.*cart/);
     });
@@ -242,9 +248,9 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 8: Verify the correct book is in the cart', async () => {
 
-    await step('Read product names from cart table', async () => {
+    await allure.step('Read product names from cart table', async () => {
       const cartProducts = await cartPage.getProductNames();
-      await attachment('Cart Products', cartProducts.join('\n'), 'text/plain');
+      await allure.attachment('Cart Products', cartProducts.join('\n'), 'text/plain');
       const bookInCart = cartProducts.some(name =>
         name.toLowerCase().includes(testData.search.expectedBook.toLowerCase())
       );
@@ -258,13 +264,10 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 9: Estimate shipping cost', async () => {
 
-    await step('Select country, state and enter zip code', async () => {
-      await parameter('Country', testData.shipping.country);
-      await parameter('State', testData.shipping.state);
-      await parameter('Zip Code', testData.shipping.zip);
-    });
-
-    await step('Click "Estimate shipping" and wait for results', async () => {
+    await allure.step('Fill shipping estimation form and submit', async () => {
+      await allure.parameter('Shipping Country', testData.shipping.country);
+      await allure.parameter('Shipping State', testData.shipping.state);
+      await allure.parameter('Shipping Zip', testData.shipping.zip);
       await cartPage.estimateShipping(
         testData.shipping.country,
         testData.shipping.state,
@@ -272,11 +275,11 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
       );
     });
 
-    await step('Verify shipping options are displayed', async () => {
+    await allure.step('Verify shipping options are displayed', async () => {
       await expect(cartPage.shippingResultsSection).toBeVisible();
       const shippingOptions = await cartPage.getShippingOptions();
       expect(shippingOptions.length).toBeGreaterThan(0);
-      await attachment('Shipping Options', shippingOptions.join('\n'), 'text/plain');
+      await allure.attachment('Shipping Options', shippingOptions.join('\n'), 'text/plain');
     });
 
   });
@@ -286,12 +289,12 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 10: Accept terms of service and proceed to checkout', async () => {
 
-    await step('Check the "Terms of Service" checkbox', async () => {
+    await allure.step('Check the "Terms of Service" checkbox', async () => {
       await cartPage.termsOfServiceCheckbox.check();
       await expect(cartPage.termsOfServiceCheckbox).toBeChecked();
     });
 
-    await step('Click the "Checkout" button', async () => {
+    await allure.step('Click the "Checkout" button', async () => {
       await cartPage.checkoutButton.click();
       await expect(page).toHaveURL(/.*checkout/);
     });
@@ -303,13 +306,13 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 11: Fill in billing address details', async () => {
 
-    await step('Enter billing address form fields', async () => {
-      await parameter('First Name', testData.checkout.firstName);
-      await parameter('Last Name', testData.checkout.lastName);
-      await parameter('City', testData.checkout.city);
-      await parameter('Address', testData.checkout.address);
-      await parameter('Zip', testData.checkout.zip);
-      await parameter('Phone', testData.checkout.phone);
+    await allure.step('Enter billing address form fields', async () => {
+      await allure.parameter('Billing First Name', testData.checkout.firstName);
+      await allure.parameter('Billing Last Name', testData.checkout.lastName);
+      await allure.parameter('Billing City', testData.checkout.city);
+      await allure.parameter('Billing Address', testData.checkout.address);
+      await allure.parameter('Billing Zip', testData.checkout.zip);
+      await allure.parameter('Billing Phone', testData.checkout.phone);
 
       await checkoutPage.fillBillingAddress({
         firstName: testData.checkout.firstName,
@@ -323,7 +326,7 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
       });
     });
 
-    await step('Click "Continue" on billing step', async () => {
+    await allure.step('Click "Continue" on billing step', async () => {
       await checkoutPage.continueBilling();
     });
 
@@ -334,7 +337,7 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 12: Confirm shipping address (same as billing)', async () => {
 
-    await step('Click "Continue" on shipping address step', async () => {
+    await allure.step('Click "Continue" on shipping address step', async () => {
       await checkoutPage.continueShipping();
     });
 
@@ -345,11 +348,11 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 13: Select shipping method', async () => {
 
-    await step('Select the first available shipping method', async () => {
+    await allure.step('Select the first available shipping method', async () => {
       await checkoutPage.selectShippingMethod(0);
     });
 
-    await step('Click "Continue" on shipping method step', async () => {
+    await allure.step('Click "Continue" on shipping method step', async () => {
       await checkoutPage.continueShippingMethod();
     });
 
@@ -360,15 +363,15 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 14: Select payment method', async () => {
 
-    await step('Select "Check / Money Order" payment method', async () => {
+    await allure.step('Select "Check / Money Order" payment method', async () => {
       await checkoutPage.selectPaymentMethod('Check / Money Order');
     });
 
-    await step('Click "Continue" on payment method step', async () => {
+    await allure.step('Click "Continue" on payment method step', async () => {
       await checkoutPage.continuePaymentMethod();
     });
 
-    await step('Continue through payment info step (if visible)', async () => {
+    await allure.step('Continue through payment info step (if visible)', async () => {
       await checkoutPage.continuePaymentInfo();
     });
 
@@ -379,7 +382,7 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 15: Confirm the order', async () => {
 
-    await step('Click "Confirm" to place the order', async () => {
+    await allure.step('Click "Confirm" to place the order', async () => {
       await checkoutPage.confirmOrder();
     });
 
@@ -390,21 +393,21 @@ test('E2E: Register → Login → Search → Add to Cart → Checkout → Order 
   // ─────────────────────────────────────────────────────────────────────────
   await test.step('Step 16: Verify order confirmation page', async () => {
 
-    await step('Verify URL is the order completed page', async () => {
+    await allure.step('Verify URL is the order completed page', async () => {
       await expect(page).toHaveURL(/.*completed/);
     });
 
-    await step('Verify the order success message is displayed', async () => {
+    await allure.step('Verify the order success message is displayed', async () => {
       const isSuccessful = await orderConfirmationPage.isOrderSuccessful();
       expect(isSuccessful, 'Order completed section should be visible').toBeTruthy();
     });
 
-    await step('Verify and capture the order number', async () => {
+    await allure.step('Verify and capture the order number', async () => {
       const orderNumber = await orderConfirmationPage.getOrderNumber();
       expect(orderNumber).toBeTruthy();
       expect(orderNumber.trim().length).toBeGreaterThan(0);
-      await attachment('Order Number', orderNumber, 'text/plain');
-      await parameter('Order Number', orderNumber);
+      await allure.attachment('Order Number', orderNumber, 'text/plain');
+      await allure.parameter('Order Number', orderNumber);
     });
 
   });

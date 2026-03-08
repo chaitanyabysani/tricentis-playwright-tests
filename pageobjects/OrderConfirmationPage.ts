@@ -41,22 +41,44 @@ export class OrderConfirmationPage {
   }
 
   async getOrderNumber(): Promise<string> {
-    // Try structured elements first
-    const strongVisible = await this.orderNumberValue.isVisible().catch(() => false);
-    if (strongVisible) {
-      return await this.orderNumberValue.innerText();
+    // Strategy 1: extract "Order number: <digits>" from the whole .order-completed section
+    try {
+      const sectionText = await this.orderCompletedSection.textContent();
+      if (sectionText) {
+        const match = sectionText.match(/[Oo]rder\s+[Nn]umber[\s:#]*(\d+)/);
+        if (match) return match[1];
+      }
+    } catch {}
+
+    // Strategy 2: any <strong> inside .order-completed .details
+    try {
+      const el = this.page.locator('.order-completed .details strong, .order-completed strong');
+      if (await el.count() > 0) {
+        const text = await el.first().textContent();
+        if (text?.trim().match(/^\d+$/)) return text.trim();
+      }
+    } catch {}
+
+    // Strategy 3: dedicated class selectors
+    for (const selector of ['.order-number strong', '.order-number', '.details-value']) {
+      try {
+        const el = this.page.locator(selector);
+        if (await el.count() > 0) {
+          const text = await el.first().textContent();
+          if (text) {
+            const match = text.match(/\d+/);
+            if (match) return match[0];
+          }
+        }
+      } catch {}
     }
-    const labelVisible = await this.orderNumberLabel.isVisible().catch(() => false);
-    if (labelVisible) {
-      const text = await this.orderNumberLabel.innerText();
-      const match = text.match(/\d+/);
-      return match ? match[0] : text.trim();
-    }
-    // Fallback: extract order ID from the current URL (e.g. /checkout/completed/12345)
+
+    // Strategy 4: URL fallback for shops that embed order ID in URL
     const url = this.page.url();
     const urlMatch = url.match(/\/(\d+)\/?$/);
     if (urlMatch) return urlMatch[1];
-    return url;
+
+    return 'Order number not found';
   }
 
   async continueShopping() {
