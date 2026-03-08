@@ -15,6 +15,7 @@ Automated end-to-end test suite for [https://demowebshop.tricentis.com](https://
 - [Utilities](#utilities)
 - [Test Scenarios](#test-scenarios)
 - [Comprehensive Test Scenario Coverage](#comprehensive-test-scenario-coverage)
+- [Allure Report Basics Test Suite](#allure-report-basics-test-suite)
 - [NPM Scripts](#npm-scripts)
 - [Running Tests](#running-tests)
 - [Reports](#reports)
@@ -67,7 +68,8 @@ tricentis-playwright-tests/
 │   ├── example.spec.ts                          # Default Playwright sample test
 │   ├── registration.spec.ts                     # Registration only — saves credentials
 │   ├── registration_login.spec.ts               # E2E: Registration + Login scenario
-│   ├── e2e_purchase_flow.spec.ts                # E2E: Full purchase flow (16 steps)
+│   ├── e2e_flow/
+│   │   └── e2e_purchase_flow.spec.ts            # E2E: Full purchase flow (17 steps incl. Step 0)
 │   ├── user_registration.spec.ts                # Module 1 — User Registration (8 scenarios)
 │   ├── user_authentication.spec.ts              # Module 2 — Login / Logout (8 scenarios)
 │   ├── home_page.spec.ts                        # Module 3 — Home Page (9 scenarios)
@@ -83,13 +85,25 @@ tricentis-playwright-tests/
 │   ├── shopping_cart.spec.ts                    # Module 7 — Shopping Cart (13 scenarios)
 │   ├── checkout_flow.spec.ts                    # Module 8 — Checkout Flow (13 scenarios)
 │   ├── my_account.spec.ts                       # Module 9 — My Account (12 scenarios)
-│   └── wishlist.spec.ts                         # Module 10 — Wishlist (7 scenarios)
+│   ├── wishlist.spec.ts                         # Module 10 — Wishlist (7 scenarios)
+│   └── allure-report-basics/                    # Allure annotation demo/learning suite
+│       ├── 01_basic_description_severity.spec.ts
+│       ├── 02_allure_steps.spec.ts
+│       ├── 03_screenshots_attachment.spec.ts
+│       ├── 04_epic_feature_story.spec.ts
+│       ├── 05_allure_parameters.spec.ts
+│       ├── 06_allure_attachments.spec.ts
+│       ├── 07_allure_with_hooks.spec.ts
+│       ├── 08_allure_links.spec.ts
+│       ├── 09_complete_example.spec.ts
+│       └── README.md
 │
 ├── utils/                              # Utilities and test data
 │   ├── testdata.json                   # Static input data for tests
 │   ├── credentials.json                # Runtime-saved user credentials (array, appended)
 │   └── CredentialManager.ts            # Helper to save/load/loadAll credentials
 │
+├── global-setup.ts                     # Writes environment.properties to allure-results/ before each run
 ├── playwright.config.ts                # Playwright configuration
 ├── tsconfig.json                       # TypeScript compiler configuration
 ├── package.json                        # Dependencies and npm scripts
@@ -137,7 +151,7 @@ npx playwright install
 |---|---|
 | Base URL | `https://demowebshop.tricentis.com/` |
 | Browser | Chromium |
-| Headless | `true` |
+| Headless | `false` |
 | Test timeout | 30 seconds |
 | Expect timeout | 5 seconds |
 | Retries | 0 |
@@ -145,6 +159,7 @@ npx playwright install
 | Video | On (all tests) |
 | Trace | On (all tests) |
 | Reporters | HTML, Line, Allure |
+| Global Setup | `global-setup.ts` — writes `allure-results/environment.properties` |
 
 ### `tsconfig.json`
 
@@ -678,7 +693,7 @@ Covers the order completed / Thank You page.
 |---|---|
 | `isOrderSuccessful()` | Returns `true` if the order completed section is visible |
 | `getSuccessMessage()` | Returns the success title text |
-| `getOrderNumber()` | Returns the order number (tries element, then URL extraction as fallback) |
+| `getOrderNumber()` | Returns the actual order number using a 4-strategy extraction: (1) regex on `.order-completed` text, (2) `<strong>` in `.details`, (3) dedicated CSS selectors, (4) URL ID fallback |
 | `continueShopping()` | Click the Continue shopping button |
 
 ---
@@ -893,16 +908,19 @@ The complete end-to-end purchase scenario — from user registration through pro
 | Severity | Critical |
 | Tags | E2E, Regression, Purchase, Checkout |
 | Owner | QA Team |
-| Parameters | Search Term, Country, State, Zip, First Name, Last Name, City, Address, Phone, Order Number |
-| Attachments | Test Input Data, Search Results, Bar Notification Text, Cart Count, Cart Products, Shipping Options, Order Number |
+| Parameters | First Name, Last Name, Email, Password, Login Email, Search Term, Shipping Country, Shipping State, Shipping Zip, Billing First Name, Billing Last Name, Billing City, Billing Address, Billing Zip, Billing Phone, Order Number |
+| Attachments | Test Input Data (JSON), Registration Result, Saved Credentials (JSON), Search Results, Bar Notification Text, Cart Count, Cart Products, Shipping Options, Order Number |
 
 **Allure Step Breakdown:**
 
 ```
+Step 0:  Log test input data
+  └── Attach test input payload (JSON)
+
 Step 1:  Register a new user
   ├── Navigate to the Registration page
-  ├── Fill in registration details
-  ├── Submit form and verify success message
+  ├── Fill registration form and submit
+  ├── Verify registration success
   └── Save credentials to credentials.json
 
 Step 2:  Login with saved credentials
@@ -932,8 +950,7 @@ Step 8:  Verify the correct book is in the cart
   └── Read product names from cart table
 
 Step 9:  Estimate shipping cost
-  ├── Select country, state and enter zip code
-  ├── Click "Estimate shipping"
+  ├── Fill shipping estimation form and submit (country, state, zip)
   └── Verify shipping options are displayed
 
 Step 10: Accept terms of service and proceed to checkout
@@ -1297,6 +1314,45 @@ Each sub-module has its own dedicated spec file under `tests/`.
 
 ---
 
+## Allure Report Basics Test Suite
+
+A dedicated learning and reference suite located in `tests/allure-report-basics/` that demonstrates every major Allure annotation API with real, runnable Playwright tests.
+
+### Scripts
+
+| File | Allure Feature Demonstrated |
+|------|----------------------------|
+| `01_basic_description_severity.spec.ts` | `allure.descriptionHtml()`, `allure.severity()` |
+| `02_allure_steps.spec.ts` | `allure.step()` nesting, `test.step()` combination |
+| `03_screenshots_attachment.spec.ts` | `allure.attachment()` with screenshots (PNG) |
+| `04_epic_feature_story.spec.ts` | `allure.epic()`, `allure.feature()`, `allure.story()` — Behaviors tab |
+| `05_allure_parameters.spec.ts` | `allure.parameter()` — Parameters tab |
+| `06_allure_attachments.spec.ts` | `allure.attachment()` — text, JSON, HTML content types |
+| `07_allure_with_hooks.spec.ts` | `test.beforeEach` / `test.afterEach` hooks with Allure metadata |
+| `08_allure_links.spec.ts` | `allure.link()`, `allure.issue()`, `allure.tms()` |
+| `09_complete_example.spec.ts` | All features combined — full annotated real-world example |
+
+### Run the entire suite
+
+```bash
+npx playwright test tests/allure-report-basics/
+```
+
+### Run a single script
+
+```bash
+npx playwright test tests/allure-report-basics/01_basic_description_severity.spec.ts
+```
+
+### Run and view in Allure
+
+```bash
+npx playwright test tests/allure-report-basics/ --reporter=line,allure-playwright
+npx allure generate allure-results --clean && npx allure open
+```
+
+---
+
 ## NPM Scripts
 
 | Script | Command | Description |
@@ -1370,6 +1426,9 @@ npx playwright test tests/category_gift_cards.spec.ts
 
 # Run all category specs together
 npx playwright test --grep "Module 5"
+
+# Allure Report Basics suite
+npx playwright test tests/allure-report-basics/
 ```
 
 ### Run tests by module tag
@@ -1435,11 +1494,12 @@ npm run report:html
 When you open the Allure report, here is what you will see:
 
 ### Overview Panel
-- **Epic / Feature / Story** hierarchy for navigation and filtering
+- **Epic / Feature / Story** hierarchy for navigation and filtering in the Behaviors tab
 - **Severity** badge (Critical, Major, Normal, Minor)
-- **Tags** (E2E, Regression, Purchase, Authentication, etc.)
+- **Tags** (E2E, Regression, Purchase, Checkout, etc.)
 - **Owner** of the test
 - **Clickable link** to the application under test
+- **Environment** widget — shows Browser, Base URL, Environment, Platform, Test Framework, Language (populated by `global-setup.ts` writing `environment.properties` before each run)
 
 ### Test Description
 Each test has a full HTML description with:
@@ -1449,33 +1509,47 @@ Each test has a full HTML description with:
 - **Expected Result** — what success looks like
 
 ### Step Breakdown
-Steps are nested (test.step → allure step) for full visibility of every action.
+Steps are nested (`test.step` → `allure.step`) for full visibility of every action. The E2E purchase flow has 17 top-level steps (Step 0 through Step 16), each expanded with Playwright-level sub-steps.
 
 ### Parameters
-Each step logs its inputs as a parameter table:
+All parameters appear in a flat table at the test level. They are prefixed by context to avoid ambiguity:
 
-| Parameter | Example Value |
-|---|---|
-| Search Term | Computing and Internet |
-| Country | United States |
-| State | New York |
-| Zip Code | 10001 |
-| First Name | John |
-| Order Number | 12345 |
+| Parameter | Example Value | Context |
+|---|---|---|
+| First Name | John | Registration |
+| Last Name | Doe | Registration |
+| Email | johndoe+...@test.com | Registration |
+| Password | \*\*\*hidden\*\*\* | Registration |
+| Login Email | johndoe+...@test.com | Login step |
+| Search Term | Computing and Internet | Search step |
+| Shipping Country | United States | Shipping estimation |
+| Shipping State | New York | Shipping estimation |
+| Shipping Zip | 10001 | Shipping estimation |
+| Billing First Name | John | Billing address |
+| Billing Last Name | Doe | Billing address |
+| Billing City | New York | Billing address |
+| Billing Address | 123 Main Street | Billing address |
+| Billing Zip | 10001 | Billing address |
+| Billing Phone | 1234567890 | Billing address |
+| Order Number | 2239909 | Order confirmation |
 
 ### Attachments
 The following files are captured per test run:
 
 | Attachment | Type | Contents |
 |---|---|---|
-| Test Input Data | JSON | All input values used |
+| Test Input Data | JSON | All input values used (Step 0) |
 | Registration Result | Text | Actual UI success message |
+| Saved Credentials | JSON | Registered email (password hidden) |
 | Search Results | Text | All product names found |
 | Bar Notification Text | Text | Add-to-cart notification |
 | Cart Count Text | Text | Header cart count |
 | Cart Products | Text | Items in cart |
-| Shipping Options | Text | Available shipping methods |
-| Order Number | Text | The confirmed order ID |
+| Shipping Options | Text | Available shipping methods and costs |
+| Order Number | Text | The actual confirmed order number |
+| Screenshot | PNG | Final page state |
+| Video | WebM | Full test recording |
+| Trace | ZIP | Playwright trace for debugging |
 
 ---
 
